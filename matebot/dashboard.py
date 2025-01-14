@@ -1,6 +1,6 @@
 import requests
-from matebot.dashboard.base import Stats, User, GuildResponse
-from matebot.dashboard.types.guild import Guild
+from matebot.dashboard import Stats, User, GuildResponse, Welcome
+from matebot.dashboard.types import Guild
 from matebot.websocket import WebsocketClient
 from typing import Optional, List, Callable, Dict
 import asyncio
@@ -31,8 +31,8 @@ class DashboardClient:
             "Authorization": self._token
         }
     
-    def _request(self, method: str, url: str, auth: Optional[bool]=True) -> any:
-        req = requests.request(method=method, url=self.base_url+url, headers=self._get_headers() if auth else None)
+    def _request(self, method: str, url: str, *, auth: Optional[bool]=True, data: Optional[any]) -> any:
+        req = requests.request(method=method, url=self.base_url+url, headers=self._get_headers() if auth else None, json=data if data else None)
         req.raise_for_status()
         return req.json()
 
@@ -137,7 +137,7 @@ class DashboardClient:
         return await ws.ping()
     
     def fetch_stats(self) -> Stats:
-        return Stats(**self._request("get", "/stats", False))
+        return Stats(**self._request("get", "/stats", auth=False))
     
     def fetch_me(self) -> User:
         return User(**self._request("get", "/users/me"))
@@ -153,3 +153,9 @@ class DashboardClient:
     
     def fetch_guild(self, id: str) -> Guild:
         return Guild(**self._request("get", f"/dashboard/{id}"))
+
+    def fetch_welcome(self, id: str) -> Welcome:
+        return Welcome(**self._request("get", f"/dashboard/{id}/welcome"))
+
+    def edit_welcome(self, id: str, data: Welcome) -> None:
+        self._request("post", f"/dashboard/{id}/welcome", data=data)

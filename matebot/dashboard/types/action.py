@@ -3,20 +3,82 @@ from typing import List, Optional
 
 @dataclass
 class ActionMessageDeleteChoice:
+    """
+    Channel types:
+
+    ~~~~~~~~~~
+    1: Current Channel
+    2: Private Channel
+    3: Custom Channel
+    ~~~~~~~~~~
+    """
     channel: int
+
+    """
+    This field is required if the channel type is 3.
+    """
     channelid: str
+
+    """
+    The ID of the message to delete. 
+    """
     messageid: str
+
+    """
+    The amount of messages you want to delete (if the message type is 5).
+    """
     count: str
+
+    """
+    Bulk Delete Parameters
+    """
     parameters: str
 
 @dataclass
 class ActionMessageChoice:
+    """
+    Channel types:
+
+    ~~~~~~~~~~
+    1: Current Channel
+    2: Private Channel
+    3: Custom Channel
+    ~~~~~~~~~~
+    """
     channel: int
+
+    """
+    This field is required if the channel type is 3.
+    """
     channelid: str
+
+    """
+    This field is required if the message type is 2 (use 'interaction' for interaction replies).
+    """
     messageid: str
+
+    """
+    The member for the message (e.g. view warnings)
+    """
     member: str
+
+    """
+    The ID of the message to send (from the built-in section)
+    """
     message: str
+
+    """
+    If true, the message will be visible only to the user who initiated the interaction.
+    This is typically used for ephemeral responses to user interactions, ensuring 
+    that only the user who interacted with the bot can see the message.
+    """
     ephemeral: bool
+
+    """
+    If true, the bot will mention the user when replying to a message or interaction.
+    This is useful when you want to notify or draw the user's attention to the response, 
+    especially in cases where the bot is replying to a previous message or an interaction.
+    """
     mention: bool
 
 @dataclass
@@ -41,24 +103,30 @@ class ActionMessage:
     """
     choices: List[ActionMessageChoice]
 
-    """ 
-    'delchoices' is used for action types 4 and 5.
-    A list of 'ActionMessageDeleteChoice' objects that represent the choices for deleting messages.
-    The bot will randomly select one of the available delete choices for the action.
-    """
-    delchoices: List[ActionMessageDeleteChoice]
-
     def add_choice(self, choice: ActionMessageChoice) -> None:
         self.choices.append(choice)
 
     def set_choices(self, choices: List[ActionMessageChoice]) -> None:
         self.choices = choices
     
+    def del_choice(self, index: int) -> None:
+        del self.choices[index]
+
+    """ 
+    'delchoices' is used for action types 4 and 5.
+    A list of 'ActionMessageDeleteChoice' objects that represent the choices for deleting messages.
+    The bot will randomly select one of the available delete choices for the action.
+    """
+    delchoices: List[ActionMessageDeleteChoice]
+    
     def add_delchoice(self, choice: ActionMessageDeleteChoice) -> None:
         self.delchoices.append(choice)
     
     def set_delchoices(self, choices: List[ActionMessageDeleteChoice]) -> None:
         self.delchoices = choices
+    
+    def del_delchoice(self, index: int) -> None:
+        del self.delchoices[index]
 
 @dataclass
 class ActionRoleChoice:
@@ -88,15 +156,267 @@ class ActionRole:
     """
     choices: List[ActionRoleChoice]
 
+    def add_choice(self, choice: ActionRoleChoice) -> None:
+        self.choices.append(choice)
+
+    def set_choices(self, choices: List[ActionRoleChoice]) -> None:
+        self.choices = choices
+    
+    def del_choice(self, index: int) -> None:
+        del self.choices[index]
+
     """
     'roles' is used for action types 4 and 5.
     A list of role names or ids involved in the action.
     """
     roles: List[str]
 
+    def add_manage_choice(self, choice: str) -> None:
+        self.roles.append(choice)
+
+    def set_manage_choices(self, choices: List[str]) -> None:
+        self.roles = choices
+    
+    def del_manage_choice(self, index: int) -> None:
+        del self.roles[index]
+
+@dataclass
+class ActionChannelChoice:
+    """
+    The channel types
+    
+    ~~~~~~~~~~
+    1: Category
+    2: Text
+    3: Voice
+    4: Announcement
+    5: Forum
+    6: Stage
+    ~~~~~~~~~~
+    """
+    type: int
+    category: str
+    name: str
+
+    """
+    Grants permission to the interaction user.
+    """
+    permission: bool
+
+@dataclass
+class ActionChannelEditChoice:
+    channelid: str
+    name: str
+
+@dataclass
+class ActionChannel:
+    """
+    Description of ActionChannel types:
+    
+    ~~~~~~~~~~
+    1: Create - Create a new channel in the server.
+    2: Delete - Delete a channel from the server.
+    3: Edit - Update the name if a channel.
+    ~~~~~~~~~~
+    """
+    type: int
+
+    """
+    For ActionChannel type 1: 
+    The bot will select an ActionChannelChoice from the list and create a channel based on the selected choice.
+    """
+    choices: List[ActionChannelChoice]
+
+    def add_create_choice(self, choice: ActionChannelChoice) -> None:
+        self.choices.append(choice)
+
+    def set_create_choices(self, choices: List[ActionChannelChoice]) -> None:
+        self.choices = choices
+    
+    def del_create_choice(self, index: int) -> None:
+        del self.choices[index]
+
+    """
+    For ActionChannel type 2: 
+    The bot will select an ID from the list and delete the corresponding channel.
+    """
+    channelids: List[str]
+
+    def add_delete_choice(self, choice: str) -> None:
+        self.channelids.append(choice)
+
+    def set_delete_choices(self, choices: List[str]) -> None:
+        self.channelids = choices
+    
+    def del_delete_choice(self, index: int) -> None:
+        del self.channelids[index]
+
+    """
+    For ActionChannel type 3: 
+    The bot will select an ActionChannelEditChoice from the list and edit the channel based on the selected choice.
+    """
+    editchoices: List[ActionChannelEditChoice]
+
+    def add_edit_choice(self, choice: ActionChannelEditChoice) -> None:
+        self.editchoices.append(choice)
+
+    def set_edit_choices(self, choices: List[ActionChannelEditChoice]) -> None:
+        self.editchoices = choices
+    
+    def del_edit_choice(self, index: int) -> None:
+        del self.editchoices[index]
+
+@dataclass
+class ActionBan:
+    user: str
+
+    """
+    The time range, in seconds, within which messages will be deleted. 
+    This is used to remove messages sent by the user within the specified time when they are banned.
+    """
+    delete: str
+
+    reason: str
+
+@dataclass
+class ActionUnban:
+    user: str
+    reason: str
+
+@dataclass
+class ActionKick:
+    member: str
+    reason: str
+
+@dataclass
+class ActionMute:
+    member: str
+
+    """
+    The duration in seconds for the mute.
+    """
+    time: str
+
+    reason: str
+
+@dataclass
+class ActionGiveaway:
+    """
+    Description of ActionGiveaway types:
+    
+    ~~~~~~~~~~
+    1: Join - Adds the user to the giveaway.
+    2: Leave - Removes the user from the giveaway.
+    3: Toggle - Toggles the user's participation.
+    4: End - Ends the giveaway and selects a winner.
+    5: Reroll - Selects new winner(s) for the giveaway.
+    6: Delete - Deletes the giveaway and removes all data.
+    ~~~~~~~~~~
+    """
+    type: int
+
+    channelid: str
+    messageid: str
+    member: str
+
+@dataclass
+class ActionWebsocketField:
+    key: str
+    value: str
+
+@dataclass
+class ActionWebsocket:
+    fields: List[ActionWebsocketField]
+
+    def add_field(self, key: str, value: str) -> None:
+        self.fields.append(ActionWebsocketField(key, value))
+    
+    def set_fields(self, fields: List[ActionWebsocketField]) -> None:
+        self.fields = fields
+    
+    def remove_field(self, index: int) -> None:
+        del self.fields[index]
+
+@dataclass
+class ActionWarning:
+    """
+    Types of ActionWarning:
+    
+    ~~~~~~~~~~
+    1: Add
+    2: Remove
+    3: Clear
+    ~~~~~~~~~~
+    """
+    type: int
+
+    author: str
+    userid: str
+    reason: str
+    number: str
+
+@dataclass
+class ActionReactionChoice:
+    channelid: str
+    messageid: str
+    userid: str
+    emoji: str
+
+@dataclass
+class ActionReaction:
+    """
+    Types of ActionReaction:
+    
+    ~~~~~~~~~~
+    1: Add 
+    2: Remove
+    3: Remove All (emoji)
+    4: Remove All (reactions)
+    ~~~~~~~~~~
+    """
+    type: int
+    choices: List[ActionReactionChoice]
+
+@dataclass
+class ActionXP:
+    """
+    Types of ActionXP:
+    
+    ~~~~~~~~~~
+    1: Add 
+    2: Remove
+    3: Set
+    ~~~~~~~~~~
+    """
+    type: int
+
+    userid: str
+    amount: str
+
+@dataclass
+class ActionEconomy:
+    """
+    Types of ActionEconomy:
+    
+    ~~~~~~~~~~
+    1: Remove Cash
+    2: Remove Bank
+    3: Add Cash
+    4: Add Bank]
+    5: Withdrawal
+    6: Deposit
+    ~~~~~~~~~~
+    """
+    type: int
+
+    userid: str
+    amount: str
+
 @dataclass
 class Action:
     """
+    Action types:
+
     ~~~~~~~~~~
     1: Message
     2: Role
@@ -117,5 +437,17 @@ class Action:
     ~~~~~~~~~~
     """
     type: int
+
     message: Optional[ActionMessage]
     role: Optional[ActionRole]
+    channel: Optional[ActionChannel]
+    ban: Optional[ActionBan]
+    unban: Optional[ActionUnban]
+    kick: Optional[ActionKick]
+    mute: Optional[ActionMute]
+    giveaway: Optional[ActionGiveaway]
+    websocket: Optional[ActionWebsocket]
+    warning: Optional[ActionWarning]
+    reaction: Optional[ActionReaction]
+    xp: Optional[ActionXP]
+    economy: Optional[ActionEconomy]
