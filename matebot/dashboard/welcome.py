@@ -1,0 +1,1 @@
+from matebot.dashboard.types.embed import Embed
