@@ -23,3 +23,14 @@ class WarnAutomation:
     
     def set_permission(self, permission: DPermission) -> None:
         self.permission = permission
+
+@dataclass
+class Warn:
+    """
+    Name if the author is in the server; otherwise, their ID.
+    """
+    author: str
+
+    target: str
+    time: int
+    reason: str

@@ -1,5 +1,5 @@
 import requests
-from matebot.dashboard import Stats, User, GuildResponse, Welcome, Defender, AutomationsData, Guild
+from matebot.dashboard import Stats, User, GuildResponse, Guild
 from matebot.dashboard.types import Guild as GuildData
 from matebot.websocket import WebsocketClient
 from typing import Optional, List, Callable, Dict
@@ -156,21 +156,3 @@ class DashboardClient:
     
     async def _fetch_guild(self, id: str) -> GuildData:
         return GuildData(**self._request("get", f"/dashboard/{id}"))
-
-    def fetch_welcome(self, id: str) -> Welcome:
-        return Welcome(**self._request("get", f"/dashboard/{id}/welcome"))
-
-    def edit_welcome(self, id: str, data: Welcome) -> None:
-        self._request("post", f"/dashboard/{id}/welcome", data=data)
-    
-    def fetch_defender(self, id: str) -> Defender:
-        return Defender(**self._request("get", f"/dashboard/{id}/defender"))
-    
-    def edit_defender(self, id: str, data: Defender) -> None:
-        self._request("post", f"/dashboard/{id}/defender", data=data)
-    
-    def fetch_automations(self, id: str) -> AutomationsData:
-        return AutomationsData(**self._request("get", f"/dashboard/{id}/automations"))
-    
-    def edit_automations(self, id: str, data: AutomationsData) -> None:
-        self._request("post", f"/dashboard/{id}/automations", data=data)

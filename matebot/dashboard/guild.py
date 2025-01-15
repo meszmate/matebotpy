@@ -1,4 +1,5 @@
 from matebot.dashboard.types import Channel, Role, Guild as GuildData
+from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn
 from matebot import DashboardClient
 from typing import List, Optional
 import asyncio
@@ -23,7 +24,7 @@ class Guild:
 
     async def fetch(self) -> None:
         g = await self._client._fetch_guild(self.id)
-        self.parse(g)
+        await self.parse(g)
 
     async def start_handle_updates(self) -> None:
         asyncio.run(self._client.run_update_listener(self.id))
@@ -42,5 +43,36 @@ class Guild:
         self.roles = g.roles
         self.premium = g.premium
 
-    async def _handle_updates(self, _, g: GuildData):
-        self.parse(g)
+    async def _handle_updates(self, id, g: GuildData):
+        if id == self.id:
+            await self.parse(g)
+    
+    def fetch_welcome(self) -> Welcome:
+        return Welcome(**self._client._request("get", f"/dashboard/{self.id}/welcome"))
+
+    def edit_welcome(self, data: Welcome) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/welcome", data=data)
+    
+    def fetch_defender(self) -> Defender:
+        return Defender(**self._client._request("get", f"/dashboard/{self.id}/defender"))
+    
+    def edit_defender(self, data: Defender) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/defender", data=data)
+    
+    def fetch_automations(self) -> AutomationsData:
+        return List[AutomationsData](**self._client._request("get", f"/dashboard/{self.id}/automations"))
+    
+    def edit_automations(self, data: AutomationsData) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/automations", data=data)
+
+    def fetch_warn_automations(self) -> List[WarnAutomation]:
+        return [WarnAutomation(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns")]
+
+    def edit_warn_automations(self, automations: List[WarnAutomation]) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/warns", data=automations)
+    
+    def check_user_warnings(self, userid: str) -> List[Warn]:
+        return [Warn(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns/{userid}")]
+    
+    def del_user_warn(self, userid: str, time: int) -> None:
+        return [Warn(**item) for item in self._client._request("delete", f"/dashboard/{self.id}/warns/{userid}/{time}")]
