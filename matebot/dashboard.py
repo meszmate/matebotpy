@@ -1,10 +1,11 @@
 import requests
-from matebot.dashboard import Stats, User, GuildResponse, Welcome
+from matebot.dashboard import Stats, User, GuildResponse, Welcome, Defender
 from matebot.dashboard.types import Guild
 from matebot.websocket import WebsocketClient
 from typing import Optional, List, Callable, Dict
 import asyncio
 import websockets
+from dataclasses import asdict
 
 class DashboardClient:
     def __init__(self, token: str, *, base_url: Optional[str] = None, timeout: int, log: bool):
@@ -32,7 +33,7 @@ class DashboardClient:
         }
     
     def _request(self, method: str, url: str, *, auth: Optional[bool]=True, data: Optional[any]) -> any:
-        req = requests.request(method=method, url=self.base_url+url, headers=self._get_headers() if auth else None, json=data if data else None)
+        req = requests.request(method=method, url=self.base_url+url, headers=self._get_headers() if auth else None, json=asdict(data) if data else None)
         req.raise_for_status()
         return req.json()
 
@@ -159,3 +160,9 @@ class DashboardClient:
 
     def edit_welcome(self, id: str, data: Welcome) -> None:
         self._request("post", f"/dashboard/{id}/welcome", data=data)
+    
+    def fetch_defender(self, id: str) -> Defender:
+        return Defender(**self._request("get", f"/dashboard/{id}/defender"))
+    
+    def edit_defender(self, id: str, data: Defender) -> None:
+        self._request("post", f"/dashboard/{id}/defender", data=data)

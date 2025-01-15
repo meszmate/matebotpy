@@ -3,7 +3,18 @@ from typing import List
 
 @dataclass
 class EmbedImage:
+    """
+    Image types:
+
+    ~~~~~~~~~~
+    1: Upload or None
+    2: URL
+    3: Guild Icon
+    4: Profile Picture
+    ~~~~~~~~~~
+    """
     type: int
+
     url: str
     upload: str
 

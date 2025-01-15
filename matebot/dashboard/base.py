@@ -28,5 +28,5 @@ class Guild:
 
 @dataclass
 class GuildResponse:
-    guilds: Guild
-    guildsnot: Guild
+    guilds: List[Guild]
+    guildsnot: List[Guild]

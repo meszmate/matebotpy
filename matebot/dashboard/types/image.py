@@ -3,7 +3,20 @@ from typing import List
 
 @dataclass
 class ImageBackground:
+    """
+    Element types:
+
+    ~~~~~~~~~~
+    0: None
+    1: Image Upload
+    2: Image URL
+    3: Server Icon
+    4: Profile Picture
+    5: Color
+    ~~~~~~~~~~
+    """
     type: int
+
     color: str
     upload: str
     url: str
@@ -15,8 +28,25 @@ class ImageBackground:
 
 @dataclass
 class ImageElement:
+    """
+    Element types:
+
+    ~~~~~~~~~~
+    1: Rectangle
+    2: Text
+    3: Image Upload
+    4: Image URL
+    5: Server Icon
+    6: Profile Picture
+    ~~~~~~~~~~
+    """
     type: int
+    
+    """
+    The url must be from cdn.matebot.xyz or cdn.discordapp.com
+    """
     url: str
+    
     upload: str
     positionx: str
     positiony: str
@@ -39,3 +69,15 @@ class ImageElement:
 class Image:
     background: ImageBackground
     elements: List[ImageElement]
+
+    def set_background(self, background: ImageBackground) -> None:
+        self.background = background
+    
+    def add_element(self, element: ImageElement) -> None:
+        self.elements.append(element)
+    
+    def set_elements(self, elements: List[ImageElement]) -> None:
+        self.elements = elements
+    
+    def remove_element(self, index: int) -> None:
+        del self.elements[index]
