@@ -1,2 +1,2 @@
-from .dashboard import *
+from .dash import *
 from .websocket import *

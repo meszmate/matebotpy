@@ -1,6 +1,6 @@
 import requests
-from matebot.dashboard import Stats, User, GuildResponse, Welcome, Defender
-from matebot.dashboard.types import Guild
+from matebot.dashboard import Stats, User, GuildResponse, Welcome, Defender, AutomationsData, Guild
+from matebot.dashboard.types import Guild as GuildData
 from matebot.websocket import WebsocketClient
 from typing import Optional, List, Callable, Dict
 import asyncio
@@ -8,10 +8,10 @@ import websockets
 from dataclasses import asdict
 
 class DashboardClient:
-    def __init__(self, token: str, *, base_url: Optional[str] = None, timeout: int, log: bool):
+    def __init__(self, token: str, *, base_url: Optional[str] = None, log: bool = True):
         self._token = token
         self.base_url = "https://api.matebot.xyz/dc" if not base_url else base_url
-        self._ws_guild_update_listeners = List[Callable[[str, Guild], None]] = []
+        self._ws_guild_update_listeners = List[Callable[[str, GuildData], None]] = []
         self._ws_guild_update_connect = List[Callable[[str], None]] = []
         self._ws_guild_update_disconnect = List[Callable[[str], None]] = []
         self._ws_guild_event_listeners = List[Callable[[str, Dict[str, str]], None]] = []
@@ -19,7 +19,6 @@ class DashboardClient:
         self._ws_guild_event_disconnect = List[Callable[[str], None]] = []
         self._websocket_connections = Dict[str, websockets.ClientProtocol] = {}
         self.heartbeat_interval: int = 20
-        self.timeout: int = timeout
         self._log: bool = log
         self._websocket_update_connections: Dict[str, WebsocketClient] = {}
         self._websocket_event_connections: Dict[str, WebsocketClient] = {}
@@ -37,7 +36,7 @@ class DashboardClient:
         req.raise_for_status()
         return req.json()
 
-    def add_guild_update_handler(self, listener: Callable[[str, Guild], None]) -> None:
+    def add_guild_update_handler(self, listener: Callable[[str, GuildData], None]) -> None:
         self._ws_guild_update_listeners.append(listener)
 
     def add_guild_update_handler_connect(self, listener: Callable[[str], None]) -> None:
@@ -57,7 +56,7 @@ class DashboardClient:
     
     def _on_update_message(self, id: str, data: any):
         for i in self._ws_guild_update_listeners:
-            asyncio.create_task(i(id, Guild(**data)))
+            asyncio.create_task(i(id, GuildData(**data)))
 
     def _on_update_connect(self, id: str):
         for i in self._ws_guild_update_connect:
@@ -152,8 +151,11 @@ class DashboardClient:
     def fetch_guilds(self) -> GuildResponse:
         return GuildResponse(**self._request("get", "/guilds"))
     
-    def fetch_guild(self, id: str) -> Guild:
-        return Guild(**self._request("get", f"/dashboard/{id}"))
+    def guild(self, id, *, fetch: bool = True, ws: bool = False) -> Guild:
+        return Guild(id, client=self, fetch=fetch, ws=ws)
+    
+    async def _fetch_guild(self, id: str) -> GuildData:
+        return GuildData(**self._request("get", f"/dashboard/{id}"))
 
     def fetch_welcome(self, id: str) -> Welcome:
         return Welcome(**self._request("get", f"/dashboard/{id}/welcome"))
@@ -166,3 +168,9 @@ class DashboardClient:
     
     def edit_defender(self, id: str, data: Defender) -> None:
         self._request("post", f"/dashboard/{id}/defender", data=data)
+    
+    def fetch_automations(self, id: str) -> AutomationsData:
+        return AutomationsData(**self._request("get", f"/dashboard/{id}/automations"))
+    
+    def edit_automations(self, id: str, data: AutomationsData) -> None:
+        self._request("post", f"/dashboard/{id}/automations", data=data)

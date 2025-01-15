@@ -21,5 +21,7 @@ class Guild:
     name: str
     membercount: int
     channels: List[Channel]
+    categories: List[Channel]
+    voices: List[Channel]
     roles: List[Role]
     premium: bool
