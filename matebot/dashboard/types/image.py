@@ -79,5 +79,8 @@ class Image:
     def set_elements(self, elements: List[ImageElement]) -> None:
         self.elements = elements
     
+    def set_element(self, index: int, element: ImageElement) -> None:
+        self.elements[index] = element
+    
     def remove_element(self, index: int) -> None:
         del self.elements[index]

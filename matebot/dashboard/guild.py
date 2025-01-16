@@ -1,5 +1,5 @@
 from matebot.dashboard.types import Channel, Role, Guild as GuildData
-from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn
+from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin
 from matebot import DashboardClient
 from typing import List, Optional
 import asyncio
@@ -50,29 +50,35 @@ class Guild:
     def fetch_welcome(self) -> Welcome:
         return Welcome(**self._client._request("get", f"/dashboard/{self.id}/welcome"))
 
-    def edit_welcome(self, data: Welcome) -> None:
+    def set_welcome(self, data: Welcome) -> None:
         self._client._request("post", f"/dashboard/{self.id}/welcome", data=data)
     
     def fetch_defender(self) -> Defender:
         return Defender(**self._client._request("get", f"/dashboard/{self.id}/defender"))
     
-    def edit_defender(self, data: Defender) -> None:
+    def set_defender(self, data: Defender) -> None:
         self._client._request("post", f"/dashboard/{self.id}/defender", data=data)
     
     def fetch_automations(self) -> AutomationsData:
         return List[AutomationsData](**self._client._request("get", f"/dashboard/{self.id}/automations"))
     
-    def edit_automations(self, data: AutomationsData) -> None:
+    def set_automations(self, data: AutomationsData) -> None:
         self._client._request("post", f"/dashboard/{self.id}/automations", data=data)
 
     def fetch_warn_automations(self) -> List[WarnAutomation]:
         return [WarnAutomation(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns")]
 
-    def edit_warn_automations(self, automations: List[WarnAutomation]) -> None:
+    def set_warn_automations(self, automations: List[WarnAutomation]) -> None:
         self._client._request("post", f"/dashboard/{self.id}/warns", data=automations)
     
     def check_user_warnings(self, userid: str) -> List[Warn]:
         return [Warn(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns/{userid}")]
     
     def del_user_warn(self, userid: str, time: int) -> None:
-        return [Warn(**item) for item in self._client._request("delete", f"/dashboard/{self.id}/warns/{userid}/{time}")]
+        self._client._request("delete", f"/dashboard/{self.id}/warns/{userid}/{time}")
+    
+    def fetch_builtin(self) -> Builtin:
+        return Builtin(**self._client._request("get", f"/dashboard/{self.id}/builtin"))
+
+    def set_builtin(self, builtin: Builtin) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin)

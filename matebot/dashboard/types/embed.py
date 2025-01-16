@@ -24,10 +24,16 @@ class EmbedAuthor:
     url: str
     icon: EmbedImage
 
+    def set_icon(self, icon: EmbedImage) -> None:
+        self.icon = icon
+
 @dataclass
 class EmbedFooter:
     text: str
     icon: EmbedImage
+
+    def set_icon(self, icon: EmbedImage) -> None:
+        self.icon = icon
 
 @dataclass
 class EmbedField:
@@ -47,3 +53,15 @@ class Embed:
     image: EmbedImage
     thumbnail: EmbedImage
     fields: List[EmbedField]
+
+    def add_field(self, key: str, value: str, *, inline: bool=False) -> None:
+        self.fields.append(EmbedField(key, value, inline))
+
+    def set_fields(self, fields: List[EmbedField]) -> None:
+        self.fields = fields
+    
+    def set_field(self, index: int, field: EmbedField) -> None:
+        self.fields[index] = field
+    
+    def remove_field(self, index: int) -> None:
+        del self.fields[index]

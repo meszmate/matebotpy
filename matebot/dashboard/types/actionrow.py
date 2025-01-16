@@ -34,6 +34,24 @@ class ActionStruct:
     title: str
     forms: List[Form]
 
+    def add_action(self, action: Action) -> None:
+        self.actions.append(action)
+    
+    def set_action(self, actions: List[Action]) -> None:
+        self.actions = actions
+    
+    def remove_action(self, index: int) -> None:
+        del self.actions[index]
+
+    def add_form(self, form: Form) -> None:
+        self.forms.append(form)
+    
+    def set_forms(self, forms: List[Form]) -> None:
+        self.forms = forms
+    
+    def remove_form(self, index: int) -> None:
+        del self.forms[index]
+
 @dataclass
 class Button:
     """
@@ -62,6 +80,39 @@ class Button:
     shared: bool
     permission: Permission
 
+    def add_error_action(self, action: Action) -> None:
+        self.erractions.append(action)
+    
+    def set_error_actions(self, actions: List[Action]) -> None:
+        self.erractions = actions
+    
+    def remove_error_action(self, index: int) -> None:
+        del self.erractions[index]
+    
+    def add_permission_action(self, action: Action) -> None:
+        self.permactions.append(action)
+    
+    def set_permission_actions(self, actions: List[Action]) -> None:
+        self.permactions = actions
+    
+    def remove_permission_action(self, index: int) -> None:
+        del self.permactions[index]
+
+    def add_cooldown_action(self, action: Action) -> None:
+        self.cooldownactions.append(action)
+    
+    def set_cooldown_actions(self, actions: List[Action]) -> None:
+        self.cooldownactions = actions
+    
+    def remove_cooldown_action(self, index: int) -> None:
+        del self.cooldownactions[index]
+    
+    def set_permission(self, perm: Permission) -> None:
+        self.permission = perm
+    
+    def set_emoji(self, emoji: Emoji) -> None:
+        self.emoji = emoji
+
 @dataclass
 class Option:
     label: str
@@ -75,6 +126,48 @@ class Option:
     cooldown: int
     isglobal: bool
     shared: bool
+
+    def add_error_action(self, action: Action) -> None:
+        self.erractions.append(action)
+    
+    def set_error_actions(self, actions: List[Action]) -> None:
+        self.erractions = actions
+    
+    def set_error_action(self, index: int, action: Action) -> None:
+        self.erractions[index] = action
+    
+    def remove_error_action(self, index: int) -> None:
+        del self.erractions[index]
+    
+    def add_permission_action(self, action: Action) -> None:
+        self.permactions.append(action)
+    
+    def set_permission_actions(self, actions: List[Action]) -> None:
+        self.permactions = actions
+    
+    def set_permission_action(self, index: int, action: Action) -> None:
+        self.permactions[index] = action
+    
+    def remove_permission_action(self, index: int) -> None:
+        del self.permactions[index]
+
+    def add_cooldown_action(self, action: Action) -> None:
+        self.cooldownactions.append(action)
+    
+    def set_cooldown_actions(self, actions: List[Action]) -> None:
+        self.cooldownactions = actions
+    
+    def set_cooldown_action(self, index: int, action: Action) -> None:
+        self.cooldownactions[index] = action
+    
+    def remove_cooldown_action(self, index: int) -> None:
+        del self.cooldownactions[index]
+    
+    def set_permission(self, perm: Permission) -> None:
+        self.permission = perm
+    
+    def set_emoji(self, emoji: Emoji) -> None:
+        self.emoji = emoji
 
 @dataclass
 class SelectMenu:
@@ -95,8 +188,113 @@ class SelectMenu:
     disabled: bool
     options: List[Option]
 
+    def add_option(self, option: Option) -> None:
+        self.options.append(option)
+    
+    def set_options(self, options: List[Option]) -> None:
+        self.options = options
+    
+    def set_option(self, index: int, option: Option) -> None:
+        self.options[index] = option
+    
+    def remove_option(self, index: int) -> None:
+        del self.options[index]
+
 @dataclass
 class ActionRow:
+    """
+    ActionRow types:
+
+    ~~~~~~~~~~
+    1: Buttons
+    2: SelectMenu
+    ~~~~~~~~~~
+    """
     type: int
     buttons: List[Button]
     selectmenu: SelectMenu
+
+    def add_button(self, button: Button) -> None:
+        self.buttons.append(button)
+    
+    def set_buttons(self, buttons: List[Button]) -> None:
+        self.buttons = buttons
+    
+    def set_button(self, index: int, button: Button) -> None:
+        self.buttons[index] = button
+    
+    def remove_button(self, index: Button) -> None:
+        del self.buttons[index]
+
+@dataclass
+class PageButton:
+    """
+    PageButton types:
+
+    ~~~~~~~~~~
+    0: Normal
+    1: Next
+    2: Previous
+    3: Set
+    ~~~~~~~~~~
+    """
+    type: int
+    
+    count: str
+    button: Button
+
+@dataclass
+class PageOption:
+    """
+    PageButton types:
+
+    ~~~~~~~~~~
+    0: Normal
+    1: Next
+    2: Previous
+    3: Set
+    ~~~~~~~~~~
+    """
+    type: int
+    
+    count: str
+    option: Option
+
+@dataclass
+class PageSelectMenu:
+    type: int
+
+    placeholder: str
+    disabled: bool
+    options: List[PageOption]
+
+    def add_option(self, option: PageOption) -> None:
+        self.options.append(option)
+    
+    def set_options(self, options: List[PageOption]) -> None:
+        self.options = options
+    
+    def set_option(self, index: int, option: PageOption) -> None:
+        self.options[index] = option
+    
+    def remove_option(self, index: PageOption) -> None:
+        del self.options[index]
+
+@dataclass
+class PageActionRow:
+    type: int
+
+    buttons: List[PageButton]
+    selectmenu: PageSelectMenu
+
+    def add_button(self, button: PageButton) -> None:
+        self.buttons.append(button)
+    
+    def set_buttons(self, buttons: List[PageButton]) -> None:
+        self.buttons = buttons
+    
+    def set_button(self, index: int, button: PageButton) -> None:
+        self.buttons[index] = button
+    
+    def remove_button(self, index: PageButton) -> None:
+        del self.buttons[index]

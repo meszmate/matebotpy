@@ -109,6 +109,9 @@ class ActionMessage:
     def set_choices(self, choices: List[ActionMessageChoice]) -> None:
         self.choices = choices
     
+    def set_choice(self, index: int, choice: ActionMessageChoice) -> None:
+        self.choices[index] = choice
+    
     def del_choice(self, index: int) -> None:
         del self.choices[index]
 
@@ -124,6 +127,9 @@ class ActionMessage:
     
     def set_delchoices(self, choices: List[ActionMessageDeleteChoice]) -> None:
         self.delchoices = choices
+    
+    def set_delchoice(self, index: int, choice: ActionMessageDeleteChoice) -> None:
+        self.delchoices[index] = choice
     
     def del_delchoice(self, index: int) -> None:
         del self.delchoices[index]
@@ -162,6 +168,9 @@ class ActionRole:
     def set_choices(self, choices: List[ActionRoleChoice]) -> None:
         self.choices = choices
     
+    def set_choice(self, index: int, choice: ActionRoleChoice) -> None:
+        self.choices[index] = choice
+    
     def del_choice(self, index: int) -> None:
         del self.choices[index]
 
@@ -176,6 +185,9 @@ class ActionRole:
 
     def set_manage_choices(self, choices: List[str]) -> None:
         self.roles = choices
+
+    def set_manage_choice(self, index: int, choice: str) -> None:
+        self.roles[index] = choice
     
     def del_manage_choice(self, index: int) -> None:
         del self.roles[index]
@@ -232,6 +244,9 @@ class ActionChannel:
 
     def set_create_choices(self, choices: List[ActionChannelChoice]) -> None:
         self.choices = choices
+
+    def set_create_choice(self, index: int, choice: ActionChannelChoice) -> None:
+        self.choices[index] = choice
     
     def del_create_choice(self, index: int) -> None:
         del self.choices[index]
@@ -247,6 +262,9 @@ class ActionChannel:
 
     def set_delete_choices(self, choices: List[str]) -> None:
         self.channelids = choices
+
+    def set_delete_choice(self, index: int, choice: str) -> None:
+        self.channelids[index] = choice
     
     def del_delete_choice(self, index: int) -> None:
         del self.channelids[index]
@@ -262,6 +280,9 @@ class ActionChannel:
 
     def set_edit_choices(self, choices: List[ActionChannelEditChoice]) -> None:
         self.editchoices = choices
+    
+    def set_edit_choice(self, index: int, choice: ActionChannelEditChoice) -> None:
+        self.editchoices[index] = choice
     
     def del_edit_choice(self, index: int) -> None:
         del self.editchoices[index]
@@ -334,6 +355,9 @@ class ActionWebsocket:
     def set_fields(self, fields: List[ActionWebsocketField]) -> None:
         self.fields = fields
     
+    def set_field(self, index: int, field: ActionWebsocketField) -> None:
+        self.fields[index] = field
+    
     def remove_field(self, index: int) -> None:
         del self.fields[index]
 
@@ -376,6 +400,18 @@ class ActionReaction:
     """
     type: int
     choices: List[ActionReactionChoice]
+
+    def add_choice(self, choice: ActionReactionChoice) -> None:
+        self.choices.append(choice)
+    
+    def set_choices(self, choices: List[ActionReactionChoice]) -> None:
+        self.choices = choices
+    
+    def set_choice(self, index: int, choice: ActionReactionChoice) -> None:
+        self.choices[index] = choice
+    
+    def remove_choice(self, index: int) -> None:
+        del self.choices[index]
 
 @dataclass
 class ActionXP:

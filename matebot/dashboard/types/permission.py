@@ -22,8 +22,14 @@ class Permission:
     def set_roles(self, roles: List[str]) -> None:
         self.roles = roles
     
+    def set_role(self, index: int, role: str) -> None:
+        self.roles[index] = role
+    
     def remove_role(self, index: int) -> None:
         del self.roles[index]
+    
+    def remove_role_by_id(self, role: str) -> None:
+        self.roles = [r for r in self.roles if r != role]
 
 @dataclass
 class DPermission:
@@ -44,6 +50,9 @@ class DPermission:
     
     def set_roles(self, roles: List[str]) -> None:
         self.roles = roles
+    
+    def set_role(self, index: int, role: str) -> None:
+        self.roles[index] = role
     
     def remove_role(self, index: int) -> None:
         del self.roles[index]
@@ -71,6 +80,9 @@ class Channels:
     
     def set_channels(self, channels: List[str]) -> None:
         self.channels = channels
+    
+    def set_channel(self, index: int, channel: str) -> None:
+        self.channels[index] = channel
     
     def remove_channel(self, index: int) -> None:
         del self.channels[index]

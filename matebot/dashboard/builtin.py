@@ -1,16 +1,12 @@
 from dataclasses import dataclass
 from typing import List
-from matebot.dashboard.types import Embed, ActionRow, Image
+from matebot.dashboard.types import ActionRow, PageActionRow, Embed
 
 @dataclass
-class WelcomeMessage:
-    message: bool
-    channelid: str
+class BuiltinBasic:
     content: str
     embeds: List[Embed]
     actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -23,31 +19,25 @@ class WelcomeMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
-    
+
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
-
+    
     def set_actionrows(self, actionrows: List[ActionRow]) -> None:
         self.actionrows = actionrows
     
     def set_actionrow(self, index: int, actionrow: ActionRow) -> None:
         self.actionrows[index] = actionrow
-
+    
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
-    
-    def set_image(self, image: Image) -> None:
-        self.image = image
 
 @dataclass
-class GoodbyeMessage:
-    message: bool
-    channelid: str
+class BuiltinMessage:
     content: str
     embeds: List[Embed]
     actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
+    id: str
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -60,31 +50,26 @@ class GoodbyeMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
-    
+
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
-
+    
     def set_actionrows(self, actionrows: List[ActionRow]) -> None:
         self.actionrows = actionrows
     
     def set_actionrow(self, index: int, actionrow: ActionRow) -> None:
         self.actionrows[index] = actionrow
-
+    
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
-    
-    def set_image(self, image: Image) -> None:
-        self.image = image
-
 
 @dataclass
-class WelcomePrivateMessage:
-    message: bool
+class BuiltinPageBasic:
+    max: str
+    count: str
     content: str
     embeds: List[Embed]
     actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -97,34 +82,57 @@ class WelcomePrivateMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
-    
+
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
-
+    
     def set_actionrows(self, actionrows: List[ActionRow]) -> None:
         self.actionrows = actionrows
     
     def set_actionrow(self, index: int, actionrow: ActionRow) -> None:
         self.actionrows[index] = actionrow
-
+    
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
     
-    def set_image(self, image: Image) -> None:
-        self.image = image
-
+@dataclass
+class BuiltinWithErr:
+    success: BuiltinBasic
+    error: BuiltinBasic
 
 @dataclass
-class Welcome:
-    welcome: WelcomeMessage
-    goodbye: GoodbyeMessage
-    private: WelcomePrivateMessage
+class BuiltinPageWithErr:
+    success: BuiltinPageBasic
+    error: BuiltinBasic
 
-    def set_welcome(self, welcome: WelcomeMessage) -> None:
-        self.welcome = welcome
+@dataclass
+class Builtin:
+    clear: BuiltinBasic
+    warning: BuiltinWithErr
+    warnings: BuiltinPageWithErr
+    delwarning: BuiltinWithErr
+    clearwarnings: BuiltinBasic
+    mute: BuiltinWithErr
+    rankcard: BuiltinBasic
+    xpleaderboard: BuiltinPageBasic
+    balance: BuiltinBasic
+    ecoleaderboard: BuiltinPageBasic
+    giveaway: BuiltinBasic
+    giveawayend: BuiltinBasic
+    giveawayreroll: BuiltinBasic
+    messages: List[BuiltinMessage]
+
+    def add_message(self, message: BuiltinMessage) -> None:
+        self.messages.append(message)
     
-    def set_goodbye(self, goodbye: GoodbyeMessage) -> None:
-        self.goodbye = goodbye
+    def set_messages(self, messages: List[BuiltinMessage]) -> None:
+        self.messages = messages
     
-    def set_private(self, private: WelcomePrivateMessage) -> None:
-        self.private = private
+    def set_message(self, index: int, message: BuiltinMessage) -> None:
+        self.messages[index] = message
+    
+    def remove_message(self, index: int) -> None:
+        del self.messages[index]
+    
+    def remove_message_by_id(self, id: str) -> None:
+        self.messages = [message for message in self.messages if message.id != id]

@@ -15,6 +15,9 @@ class DefenderDefault:
     
     def set_actions(self, actions: List[Action]) -> None:
         self.actions = actions
+    
+    def set_action(self, index: int, action: Action) -> None:
+        self.actions[index] = action
 
     def remove_action(self, index: int) -> None:
         del self.actions[index]
@@ -36,6 +39,9 @@ class DefenderMessage:
     
     def set_actions(self, actions: List[Action]) -> None:
         self.actions = actions
+    
+    def set_action(self, index: int, action: Action) -> None:
+        self.actions[index] = action
 
     def remove_action(self, index: int) -> None:
         del self.actions[index]
