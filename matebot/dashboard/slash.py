@@ -234,3 +234,30 @@ class Localization:
 class SlashCommands:
     commands: List[SlashCommand]
     localizations: List[Localization]
+
+    def add_command(self, command: SlashCommand) -> None:
+        self.commands.append(command)
+    
+    def set_commands(self, commands: List[SlashCommand]) -> None:
+        self.commands = commands
+    
+    def set_command(self, index: int, command: SlashCommand) -> None:
+        self.commands[index] = command
+    
+    def remove_command(self, index: int) -> None:
+        del self.commands[index]
+    
+    def remove_command_by_id(self, id: str) -> None:
+        self.commands = [cmd for cmd in self.commands if cmd.id != id]
+    
+    def add_localization(self, localization: Localization) -> None:
+        self.localizations.append(localization)
+    
+    def set_localizations(self, localizations: List[Localization]) -> None:
+        self.localizations = localizations
+    
+    def set_localization(self, index: int, localization: Localization) -> None:
+        self.localizations[index] = localization
+    
+    def remove_localization(self, index: int) -> None:
+        del self.localizations[index]

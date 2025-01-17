@@ -1,7 +1,7 @@
 from matebot.dashboard.types import Channel, Role, Guild as GuildData
-from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin, SlashCommands
+from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin, SlashCommands, LevelSettings, Giveaway, TempChannelSettings
 from matebot import DashboardClient
-from typing import List, Optional
+from typing import List
 import asyncio
 
 class Guild:
@@ -88,3 +88,24 @@ class Guild:
 
     def set_slashcommands(self, commands: SlashCommands) -> None:
         self._client._request("post", f"/dashboard/{self.id}/slash", data=commands)
+
+    def get_level_settings(self) -> LevelSettings:
+        return LevelSettings(**self._client._request("get", f"/dashboard/{self.id}/levels"))
+    
+    def set_level_settings(self, settings: LevelSettings) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/levels", data=settings)
+        
+    def get_giveaways(self) -> List[Giveaway]:
+        return [Giveaway(**gw) for gw in self._client._request("get", f"/dashboard/{self.id}/giveaways")]
+
+    def set_giveaway(self, giveaway: Giveaway) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/giveaways", data=giveaway)
+    
+    def delete_giveaway(self, channelid: str, messageid: str) -> None:
+        self._client._request("delete", f"/dashboard/{self.id}/giveaways?channelid={channelid}&messageid={messageid}")
+
+    def get_tempchannels(self) -> TempChannelSettings:
+        return TempChannelSettings(**self._client._request("get", f"/dashboard/{self.id}/tempchannels"))
+    
+    def set_tempchannels(self, channels: TempChannelSettings) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/tempchannels", data=channels)

@@ -20,12 +20,6 @@ class MessageAutomation:
     content: str
 
     actions: List[Action]
-    permission: DPermission
-    channels: Channels
-
-    cooldown: int
-    isglobal: bool
-    shared: bool
 
     def add_action(self, action: Action) -> None:
         self.actions.append(action)
@@ -39,11 +33,19 @@ class MessageAutomation:
     def remove_action(self, index: int) -> None:
         del self.actions[index]
 
+    permission: DPermission
+
     def set_permission(self, permission: DPermission) -> None:
         self.permission = permission
+
+    channels: Channels
     
     def set_channels(self, channels: Channels) -> None:
         self.channels = channels
+
+    cooldown: int
+    isglobal: bool
+    shared: bool
 
 @dataclass
 class Automation:
@@ -97,4 +99,26 @@ class Automation:
 @dataclass
 class AutomationsData:
     message: List[MessageAutomation]
+
+    def add_message_automation(self, automation: MessageAutomation) -> None:
+        self.message.append(automation)
+    
+    def set_message_automations(self, automations: List[MessageAutomation]) -> None:
+        self.message = automations
+    
+    def set_message_automation(self, index: int, automation: MessageAutomation) -> None:
+        self.message[index] = automation
+
     normal: List[Automation]
+
+    def add_automation(self, automation: Automation) -> None:
+        self.normal.append(automation)
+    
+    def set_automations(self, automations: List[Automation]) -> None:
+        self.normal = automations
+    
+    def set_automation(self, index: int, automation: Automation) -> None:
+        self.normal[index] = automation
+    
+    def remove_automation(self, index: int) -> None:
+        del self.normal[index]

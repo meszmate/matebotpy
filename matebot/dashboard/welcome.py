@@ -7,10 +7,8 @@ class WelcomeMessage:
     message: bool
     channelid: str
     content: str
+     
     embeds: List[Embed]
-    actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -23,6 +21,8 @@ class WelcomeMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
+
+    actionrows: List[ActionRow]
     
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
@@ -35,6 +35,10 @@ class WelcomeMessage:
 
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
+
+    image: bool
+
+    imagedata: Image
     
     def set_image(self, image: Image) -> None:
         self.image = image
@@ -45,9 +49,6 @@ class GoodbyeMessage:
     channelid: str
     content: str
     embeds: List[Embed]
-    actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -60,6 +61,8 @@ class GoodbyeMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
+
+    actionrows: List[ActionRow]
     
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
@@ -72,6 +75,10 @@ class GoodbyeMessage:
 
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
+
+    image: bool
+
+    imagedata: Image
     
     def set_image(self, image: Image) -> None:
         self.image = image
@@ -82,9 +89,6 @@ class WelcomePrivateMessage:
     message: bool
     content: str
     embeds: List[Embed]
-    actionrows: List[ActionRow]
-    image: bool
-    imagedata: Image
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -97,6 +101,8 @@ class WelcomePrivateMessage:
     
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
+
+    actionrows: List[ActionRow]
     
     def add_actionrow(self, actionrow: ActionRow) -> None:
         self.actionrows.append(actionrow)
@@ -109,6 +115,10 @@ class WelcomePrivateMessage:
 
     def remove_actionrow(self, index: int) -> None:
         del self.actionrows[index]
+
+    image: bool
+
+    imagedata: Image
     
     def set_image(self, image: Image) -> None:
         self.image = image
@@ -117,14 +127,16 @@ class WelcomePrivateMessage:
 @dataclass
 class Welcome:
     welcome: WelcomeMessage
-    goodbye: GoodbyeMessage
-    private: WelcomePrivateMessage
 
     def set_welcome(self, welcome: WelcomeMessage) -> None:
         self.welcome = welcome
+
+    goodbye: GoodbyeMessage
     
     def set_goodbye(self, goodbye: GoodbyeMessage) -> None:
         self.goodbye = goodbye
+        
+    private: WelcomePrivateMessage
     
     def set_private(self, private: WelcomePrivateMessage) -> None:
         self.private = private

@@ -6,3 +6,6 @@ from .moderation import *
 from .guild import *
 from .builtin import *
 from .slash import *
+from .levels import *
+from .giveaway import *
+from .tempchannels import *

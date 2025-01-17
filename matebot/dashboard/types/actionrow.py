@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 from matebot.dashboard.types import Action, Permission
 
 @dataclass

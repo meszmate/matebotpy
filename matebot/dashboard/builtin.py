@@ -3,7 +3,7 @@ from typing import List
 from matebot.dashboard.types import ActionRow, PageActionRow, Embed
 
 @dataclass
-class BuiltinBasic:
+class Message:
     content: str
     embeds: List[Embed]
     actionrows: List[ActionRow]
@@ -69,7 +69,7 @@ class BuiltinPageBasic:
     count: str
     content: str
     embeds: List[Embed]
-    actionrows: List[ActionRow]
+    actionrows: List[PageActionRow]
 
     def add_embed(self, embed: Embed) -> None:
         self.embeds.append(embed)
@@ -83,13 +83,13 @@ class BuiltinPageBasic:
     def remove_embed(self, index: int) -> None:
         del self.embeds[index]
 
-    def add_actionrow(self, actionrow: ActionRow) -> None:
+    def add_actionrow(self, actionrow: PageActionRow) -> None:
         self.actionrows.append(actionrow)
     
-    def set_actionrows(self, actionrows: List[ActionRow]) -> None:
+    def set_actionrows(self, actionrows: List[PageActionRow]) -> None:
         self.actionrows = actionrows
     
-    def set_actionrow(self, index: int, actionrow: ActionRow) -> None:
+    def set_actionrow(self, index: int, actionrow: PageActionRow) -> None:
         self.actionrows[index] = actionrow
     
     def remove_actionrow(self, index: int) -> None:
@@ -97,29 +97,29 @@ class BuiltinPageBasic:
     
 @dataclass
 class BuiltinWithErr:
-    success: BuiltinBasic
-    error: BuiltinBasic
+    success: Message
+    error: Message
 
 @dataclass
 class BuiltinPageWithErr:
     success: BuiltinPageBasic
-    error: BuiltinBasic
+    error: Message
 
 @dataclass
 class Builtin:
-    clear: BuiltinBasic
+    clear: Message
     warning: BuiltinWithErr
     warnings: BuiltinPageWithErr
     delwarning: BuiltinWithErr
-    clearwarnings: BuiltinBasic
+    clearwarnings: Message
     mute: BuiltinWithErr
-    rankcard: BuiltinBasic
+    rankcard: Message
     xpleaderboard: BuiltinPageBasic
-    balance: BuiltinBasic
+    balance: Message
     ecoleaderboard: BuiltinPageBasic
-    giveaway: BuiltinBasic
-    giveawayend: BuiltinBasic
-    giveawayreroll: BuiltinBasic
+    giveaway: Message
+    giveawayend: Message
+    giveawayreroll: Message
     messages: List[BuiltinMessage]
 
     def add_message(self, message: BuiltinMessage) -> None:

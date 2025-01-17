@@ -10,6 +10,10 @@ class WarnAutomation:
     warns: str
 
     permission: DPermission
+    
+    def set_permission(self, permission: DPermission) -> None:
+        self.permission = permission
+
     actions: List[Action]
 
     def add_action(self, action: Action) -> None:
@@ -23,9 +27,6 @@ class WarnAutomation:
     
     def remove_action(self, index: int) -> None:
         del self.actions[index]
-    
-    def set_permission(self, permission: DPermission) -> None:
-        self.permission = permission
 
 @dataclass
 class Warn:

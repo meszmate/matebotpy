@@ -25,7 +25,6 @@ class DashboardClient:
         self.max_retries: int = 10
         self.retry_delay: int = 180
 
-    
     def _get_headers(self):
         return {
             "Authorization": self._token
