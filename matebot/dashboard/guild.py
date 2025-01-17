@@ -47,65 +47,65 @@ class Guild:
         if id == self.id:
             await self.parse(g)
     
-    def fetch_welcome(self) -> Welcome:
-        return Welcome(**self._client._request("get", f"/dashboard/{self.id}/welcome"))
+    async def fetch_welcome(self) -> Welcome:
+        return Welcome(**await self._client._request("get", f"/dashboard/{self.id}/welcome"))
 
-    def set_welcome(self, data: Welcome) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/welcome", data=data)
+    async def set_welcome(self, data: Welcome) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/welcome", data=data)
     
-    def fetch_defender(self) -> Defender:
-        return Defender(**self._client._request("get", f"/dashboard/{self.id}/defender"))
+    async def fetch_defender(self) -> Defender:
+        return Defender(**await self._client._request("get", f"/dashboard/{self.id}/defender"))
     
-    def set_defender(self, data: Defender) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/defender", data=data)
+    async def set_defender(self, data: Defender) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/defender", data=data)
     
-    def fetch_automations(self) -> AutomationsData:
-        return List[AutomationsData](**self._client._request("get", f"/dashboard/{self.id}/automations"))
+    async def fetch_automations(self) -> AutomationsData:
+        return [AutomationsData(**automation) for automation in await self._client._request("get", f"/dashboard/{self.id}/automations")]
     
-    def set_automations(self, data: AutomationsData) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/automations", data=data)
+    async def set_automations(self, data: AutomationsData) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/automations", data=data)
 
-    def fetch_warn_automations(self) -> List[WarnAutomation]:
-        return [WarnAutomation(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns")]
+    async def fetch_warn_automations(self) -> List[WarnAutomation]:
+        return [WarnAutomation(**item) for item in await self._client._request("get", f"/dashboard/{self.id}/warns")]
 
-    def set_warn_automations(self, automations: List[WarnAutomation]) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/warns", data=automations)
+    async def set_warn_automations(self, automations: List[WarnAutomation]) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/warns", data=automations)
     
-    def check_user_warnings(self, userid: str) -> List[Warn]:
-        return [Warn(**item) for item in self._client._request("get", f"/dashboard/{self.id}/warns/{userid}")]
+    async def check_user_warnings(self, userid: str) -> List[Warn]:
+        return [Warn(**item) for item in await self._client._request("get", f"/dashboard/{self.id}/warns/{userid}")]
     
-    def del_user_warn(self, userid: str, time: int) -> None:
-        self._client._request("delete", f"/dashboard/{self.id}/warns/{userid}/{time}")
+    async def del_user_warn(self, userid: str, time: int) -> None:
+        await self._client._request("delete", f"/dashboard/{self.id}/warns/{userid}/{time}")
     
-    def fetch_builtin(self) -> Builtin:
-        return Builtin(**self._client._request("get", f"/dashboard/{self.id}/builtin"))
+    async def fetch_builtin(self) -> Builtin:
+        return Builtin(**await self._client._request("get", f"/dashboard/{self.id}/builtin"))
 
-    def set_builtin(self, builtin: Builtin) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin)
+    async def set_builtin(self, builtin: Builtin) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin)
     
-    def get_slashcommands(self) -> SlashCommands:
-        return SlashCommands(**self._client._request("get", f"/dashboard/{self.id}/slash"))
+    async def get_slashcommands(self) -> SlashCommands:
+        return SlashCommands(**await self._client._request("get", f"/dashboard/{self.id}/slash"))
 
-    def set_slashcommands(self, commands: SlashCommands) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/slash", data=commands)
+    async def set_slashcommands(self, commands: SlashCommands) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/slash", data=commands)
 
-    def get_level_settings(self) -> LevelSettings:
-        return LevelSettings(**self._client._request("get", f"/dashboard/{self.id}/levels"))
+    async def get_level_settings(self) -> LevelSettings:
+        return LevelSettings(**await self._client._request("get", f"/dashboard/{self.id}/levels"))
     
-    def set_level_settings(self, settings: LevelSettings) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/levels", data=settings)
+    async def set_level_settings(self, settings: LevelSettings) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/levels", data=settings)
         
-    def get_giveaways(self) -> List[Giveaway]:
-        return [Giveaway(**gw) for gw in self._client._request("get", f"/dashboard/{self.id}/giveaways")]
+    async def get_giveaways(self) -> List[Giveaway]:
+        return [Giveaway(**gw) for gw in await self._client._request("get", f"/dashboard/{self.id}/giveaways")]
 
-    def set_giveaway(self, giveaway: Giveaway) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/giveaways", data=giveaway)
+    async def set_giveaway(self, giveaway: Giveaway) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/giveaways", data=giveaway)
     
-    def delete_giveaway(self, channelid: str, messageid: str) -> None:
-        self._client._request("delete", f"/dashboard/{self.id}/giveaways?channelid={channelid}&messageid={messageid}")
+    async def delete_giveaway(self, channelid: str, messageid: str) -> None:
+        await self._client._request("delete", f"/dashboard/{self.id}/giveaways?channelid={channelid}&messageid={messageid}")
 
-    def get_tempchannels(self) -> TempChannelSettings:
-        return TempChannelSettings(**self._client._request("get", f"/dashboard/{self.id}/tempchannels"))
+    async def get_tempchannels(self) -> TempChannelSettings:
+        return TempChannelSettings(**await self._client._request("get", f"/dashboard/{self.id}/tempchannels"))
     
-    def set_tempchannels(self, channels: TempChannelSettings) -> None:
-        self._client._request("post", f"/dashboard/{self.id}/tempchannels", data=channels)
+    async def set_tempchannels(self, channels: TempChannelSettings) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/tempchannels", data=channels)
