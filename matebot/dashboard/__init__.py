@@ -5,3 +5,4 @@ from .automations import *
 from .moderation import *
 from .guild import *
 from .builtin import *
+from .slash import *

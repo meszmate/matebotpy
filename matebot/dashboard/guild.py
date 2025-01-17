@@ -1,5 +1,5 @@
 from matebot.dashboard.types import Channel, Role, Guild as GuildData
-from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin
+from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin, SlashCommands
 from matebot import DashboardClient
 from typing import List, Optional
 import asyncio
@@ -82,3 +82,9 @@ class Guild:
 
     def set_builtin(self, builtin: Builtin) -> None:
         self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin)
+    
+    def get_slashcommands(self) -> SlashCommands:
+        return SlashCommands(**self._client._request("get", f"/dashboard/{self.id}/slash"))
+
+    def set_slashcommands(self, commands: SlashCommands) -> None:
+        self._client._request("post", f"/dashboard/{self.id}/slash", data=commands)
