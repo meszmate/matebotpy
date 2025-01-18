@@ -33,7 +33,7 @@ class FortniteCache:
         self.news: Any
         self.itemshop: ItemShop
 
-class ValorantClient:
+class FortniteClient:
     def __init__(self, api_key: str, *, base_url: Optional[str], log: bool = True):
         self._api_key = api_key
         self._ws_listeners = List[Callable[[WebsocketEvent], None]] = []
