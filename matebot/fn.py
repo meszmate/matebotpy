@@ -33,11 +33,11 @@ class FortniteCache:
         self.itemshop: ItemShop
 
 class FortniteClient:
-    def __init__(self, api_key: str, *, base_url: Optional[str], log: bool = True):
+    def __init__(self, api_key: str, *, base_url: Optional[str] = None, log: bool = True):
         self._api_key = api_key
-        self._ws_listeners = List[Callable[[WebsocketEvent], None]] = []
-        self._ws_connect = List[Callable[[], None]] = []
-        self._ws_disconnect = List[Callable[[], None]] = []
+        self._ws_listeners: List[Callable[[WebsocketEvent], None]] = []
+        self._ws_connect: List[Callable[[], None]] = []
+        self._ws_disconnect: List[Callable[[], None]] = []
         self._websocket_connection: WebsocketClient
         self.heartbeat_interval: int = 20
         self._log: bool = log

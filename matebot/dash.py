@@ -9,12 +9,12 @@ from dataclasses import asdict
 class DashboardClient:
     def __init__(self, token: str, *, base_url: Optional[str] = None, log: bool = True):
         self._token = token
-        self._ws_guild_update_listeners = List[Callable[[str, GuildData], None]] = []
-        self._ws_guild_update_connect = List[Callable[[str], None]] = []
-        self._ws_guild_update_disconnect = List[Callable[[str], None]] = []
-        self._ws_guild_event_listeners = List[Callable[[str, Dict[str, str]], None]] = []
-        self._ws_guild_event_connect = List[Callable[[str], None]] = []
-        self._ws_guild_event_disconnect = List[Callable[[str], None]] = []
+        self._ws_guild_update_listeners: List[Callable[[str, GuildData], None]] = []
+        self._ws_guild_update_connect: List[Callable[[str], None]] = []
+        self._ws_guild_update_disconnect: List[Callable[[str], None]] = []
+        self._ws_guild_event_listeners: List[Callable[[str, Dict[str, str]], None]] = []
+        self._ws_guild_event_connect: List[Callable[[str], None]] = []
+        self._ws_guild_event_disconnect: List[Callable[[str], None]] = []
         self.heartbeat_interval: int = 20
         self._log: bool = log
         self._websocket_update_connections: Dict[str, WebsocketClient] = {}
