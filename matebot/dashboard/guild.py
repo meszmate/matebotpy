@@ -8,7 +8,7 @@ from matebot.dashboard.slash import SlashCommands
 from matebot.dashboard.levels import LevelSettings
 from matebot.dashboard.giveaway import Giveaway
 from matebot.dashboard.tempchannels import TempChannelSettings
-from matebot import DashboardClient
+from matebot.dash import DashboardClient
 from typing import List
 import asyncio
 
