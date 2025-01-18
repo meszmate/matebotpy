@@ -1,5 +1,5 @@
 import aiohttp
-from matebot.fortnite import WebsocketEvent, Cosmetics, NewDisplayAsset, Quests, Banners, SparkTrack, Banner, ItemShop
+from matebot.fortnite import WebsocketEvent, Cosmetics, NewDisplayAsset, Quests, Banners, SparkTrack, Banner, ItemShop, Stats
 from matebot.websocket import WebsocketClient
 from matebot import WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
@@ -238,3 +238,21 @@ class ValorantClient:
     
     async def fetch_shop_br(self, lang: Optional[str]) -> Any:
         return ItemShop(**await self._request("get", "/shop/br", lang=lang))
+    
+    async def fetch_stats(self, name: str, *, by_id: bool=False, ends_after: str, start_time: str, end_time: str, stats: bool=True, ranks: bool=True, platform: str) -> Stats:
+        url = "/stats?name="+name
+        if by_id:
+            url+="&id=1"
+        if platform:
+            url+="&platform="+platform
+        if ends_after:
+            url+="&endsafter="+ends_after
+        if start_time:
+            url+="&starttime="+start_time
+        if end_time:
+            url+="&endtime="+end_time
+        if not stats:
+            url+="&stats=0"
+        if not ranks:
+            url+="&ranks=0"
+        return Stats(**await self._request("get", url))
