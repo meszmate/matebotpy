@@ -55,6 +55,9 @@ class ValorantClient:
     def data(self, lang: str) -> ValorantCache:
         return self._cache[lang]
     
+    def remove_data(self, lang: str) -> None:
+        del self._cache[lang]
+    
     async def setup(self, lang: str) -> None:
         if not any(l.lower() == lang.lower() for l in ValorantLanguages):
             raise Exception("Language not found.")
