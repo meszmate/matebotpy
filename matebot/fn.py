@@ -135,6 +135,7 @@ class FortniteClient:
         }
     
     async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, lang:Optional[str]) -> Any:
+        url = url[1:]
         if lang:
             url+="?lang="+lang
         async with self.session.request(method,url,headers=self._get_headers() if auth else None) as response:
@@ -196,49 +197,49 @@ class FortniteClient:
         ws = self._websocket_connection
         return await ws.ping()
     
-    async def fetch_cosmetics(self, lang: Optional[str]) -> Cosmetics:
+    async def fetch_cosmetics(self, lang: Optional[str]=None) -> Cosmetics:
         return Cosmetics(**await self._request("get", "/cosmetics", lang=lang))
     
-    async def fetch_cosmetics_item(self, templateid: str, lang: Optional[str]) -> Any:
+    async def fetch_cosmetics_item(self, templateid: str, lang: Optional[str]=None) -> Any:
         return await self._request("get", "/cosmetics/"+templateid, lang=lang)
     
-    async def fetch_banners(self, lang: Optional[str]) -> Banners:
+    async def fetch_banners(self, lang: Optional[str]=None) -> Banners:
         return Banners(**await self._request("get", "/banners", lang=lang))
 
-    async def fetch_banners_item(self, id: str, lang: Optional[str]) -> Banner:
+    async def fetch_banners_item(self, id: str, lang: Optional[str]=None) -> Banner:
         return Banners(**await self._request("get", "/banners/"+id, lang=lang))
     
-    async def fetch_newdisplayassets(self, lang: Optional[str]) -> Dict[str, List[NewDisplayAsset]]:
+    async def fetch_newdisplayassets(self, lang: Optional[str]=None) -> Dict[str, List[NewDisplayAsset]]:
         return {
             key: NewDisplayAsset(**data)
             for key, data in await self._request("get", "/newdisplayassets", lang=lang).items()
         }
     
-    async def fetch_newdisplayassets_item(self, lang: Optional[str]) -> NewDisplayAsset:
+    async def fetch_newdisplayassets_item(self, lang: Optional[str]=None) -> NewDisplayAsset:
         return NewDisplayAsset(**await self._request("get", "/newdisplayassets", lang=lang))
 
-    async def fetch_displayassets(self, lang: Optional[str]) -> Dict[str, str]:
+    async def fetch_displayassets(self, lang: Optional[str]=None) -> Dict[str, str]:
         return {
             key: str(data)
             for key, data in await self._request("get", "/displayassets", lang=lang).items()
         }
     
-    async def fetch_displayassets_item(self, id: str, lang: Optional[str]) -> str:
+    async def fetch_displayassets_item(self, id: str, lang: Optional[str]=None) -> str:
         return str(await self._request("get", "/displayassets/"+id, lang=lang))
 
-    async def fetch_quests(self, lang: Optional[str]) -> Quests:
+    async def fetch_quests(self, lang: Optional[str]=None) -> Quests:
         return Quests(**await self._request("get", "/quests", lang=lang))
 
-    async def fetch_sparktracks(self, lang: Optional[str]) -> List[SparkTrack]:
+    async def fetch_sparktracks(self, lang: Optional[str]=None) -> List[SparkTrack]:
         return [SparkTrack(**item) for item in await self._request("get", "/sparktracks", lang=lang)]
     
-    async def fetch_news(self, lang: Optional[str]) -> Any:
+    async def fetch_news(self, lang: Optional[str]=None) -> Any:
         return await self._request("get", "/news", lang=lang)
     
-    async def fetch_shop_br(self, lang: Optional[str]) -> Any:
+    async def fetch_shop_br(self, lang: Optional[str]=None) -> Any:
         return ItemShop(**await self._request("get", "/shop/br", lang=lang))
     
-    async def fetch_stats(self, name: str, *, by_id: bool=False, ends_after: str, start_time: str, end_time: str, stats: bool=True, ranks: bool=True, platform: str) -> Stats:
+    async def fetch_stats(self, name: str, *, by_id: bool=False, ends_after: Optional[str]=None, start_time: Optional[str]=None, end_time: Optional[str]=None, stats: bool=True, ranks: bool=True, platform: Optional[str]=None) -> Stats:
         url = "/stats?name="+name
         if by_id:
             url+="&id=1"

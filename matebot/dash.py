@@ -29,6 +29,7 @@ class DashboardClient:
         }
     
     async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, data: Optional[Any]) -> Any:
+        url = url[1:]
         async with self.session.request(method,url,headers=self._get_headers() if auth else None, json=asdict(data) if data else None) as response:
             if response.status == 200:
                 return await response.json()

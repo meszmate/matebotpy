@@ -154,6 +154,7 @@ class ValorantClient:
         }
     
     async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, lang:Optional[str]) -> Any:
+        url = url[1:]
         if lang:
             url+="?lang="+lang
         async with self.session.request(method,url,headers=self._get_headers() if auth else None) as response:
@@ -212,41 +213,41 @@ class ValorantClient:
         ws = self._websocket_connection
         return await ws.ping()
     
-    async def fetch_weapons(self, lang: Optional[str]) -> List[Weapon]:
+    async def fetch_weapons(self, lang: Optional[str]=None) -> List[Weapon]:
         return [Weapon(**weapon) for weapon in await self._request("get", "/weapons", lang=lang)]
     
-    async def fetch_meele(self, lang: Optional[str]) -> Weapon:
+    async def fetch_meele(self, lang: Optional[str]=None) -> Weapon:
         return Weapon(**await self._request("get", "/meele", lang=lang))
     
-    async def fetch_buddies(self, lang: Optional[str]) -> List[Buddy]:
+    async def fetch_buddies(self, lang: Optional[str]=None) -> List[Buddy]:
         return [Buddy(**buddy) for buddy in await self._request("get", "/buddies", lang=lang)]
     
-    async def fetch_characters(self, lang: Optional[str]) -> List[Character]:
+    async def fetch_characters(self, lang: Optional[str]=None) -> List[Character]:
         return [Character(**character) for character in await self._request("get", "/characters", lang=lang)]
     
-    async def fetch_levelborders(self, lang: Optional[str]) -> List[LevelBorder]:
+    async def fetch_levelborders(self, lang: Optional[str]=None) -> List[LevelBorder]:
         return [LevelBorder(**levelborder) for levelborder in await self._request("get", "/levelborders", lang=lang)]
     
-    async def fetch_playercards(self, lang: Optional[str]) -> List[PlayerCard]:
+    async def fetch_playercards(self, lang: Optional[str]=None) -> List[PlayerCard]:
         return [PlayerCard(**playercard) for playercard in await self._request("get", "/playercards", lang=lang)]
     
-    async def fetch_sprays(self, lang: Optional[str]) -> List[Spray]:
+    async def fetch_sprays(self, lang: Optional[str]=None) -> List[Spray]:
         return [Spray(**spray) for spray in await self._request("get", "/sprays", lang=lang)]
     
-    async def fetch_themes(self, lang: Optional[str]) -> Dict[str, Theme]:
+    async def fetch_themes(self, lang: Optional[str]=None) -> Dict[str, Theme]:
         return {
             key: Theme(**data)
             for key, data in await self._request("get", "/themes", lang=lang).items()
         }
 
-    async def fetch_contenttiers(self, lang: Optional[str]) -> Dict[str, ContentTier]:
+    async def fetch_contenttiers(self, lang: Optional[str]=None) -> Dict[str, ContentTier]:
         return {
             key: ContentTier(**data)
             for key, data in await self._request("get", "/contenttiers", lang=lang).items()
         }
     
-    async def fetch_bundles(self, lang: Optional[str]) -> List[Bundle]:
+    async def fetch_bundles(self, lang: Optional[str]=None) -> List[Bundle]:
         return [Bundle(**bundle) for bundle in await self._request("get", "/bundles", lang=lang)]
     
-    async def fetch_maps(self, lang: Optional[str]) -> List[Map]:
+    async def fetch_maps(self, lang: Optional[str]=None) -> List[Map]:
         return [Map(**mapdata) for mapdata in await self._request("get", "/maps", lang=lang)]
