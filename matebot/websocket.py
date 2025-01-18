@@ -4,6 +4,9 @@ from typing import Callable, Optional, Any
 import json
 import time
 
+class WebsocketClosed(Exception):
+    def __init__(self, message="WebSocket is closed"):
+        super().__init__(message)
 
 class WebsocketClient:
     def __init__(self, uri: str):
@@ -36,7 +39,7 @@ class WebsocketClient:
                     if msg.type == aiohttp.WSMsgType.TEXT:
                         await self._handle_messages(self.id, json.loads(msg.data))
                     elif msg.type == aiohttp.WSMsgType.CLOSED:
-                        raise Exception("WebSocket is closed")
+                        raise WebsocketClosed
                     elif msg.type == aiohttp.WSMsgType.ERROR:
                         raise Exception(f"WebSocket error: {msg.data}")
 

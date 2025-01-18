@@ -2,6 +2,7 @@ import aiohttp
 from matebot.dashboard import Stats, User, GuildResponse, Guild
 from matebot.dashboard.types import Guild as GuildData
 from matebot.websocket import WebsocketClient
+from matebot import WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 import websockets
@@ -22,7 +23,7 @@ class DashboardClient:
         self._websocket_event_connections: Dict[str, WebsocketClient] = {}
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession(base_url="https://api.matebot.xyz/dc" if not base_url else base_url)
+        self.session = aiohttp.ClientSession("https://api.matebot.xyz/dc" if not base_url else base_url)
 
     def _get_headers(self):
         return {
@@ -70,17 +71,17 @@ class DashboardClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self.base_url.replace("https", "wss")+"/dashboard/"+guildid+"/ws")
+                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/ws?auth="+self._token)
                 self._websocket_update_connections[guildid] = ws
                 ws.on_message = self._on_update_message
                 ws.onconnect = self._on_update_connect
                 try:
                     await ws.connect()
-                except websockets.ConnectionClosed:
+                except WebsocketClosed:
                     retries = 0
                     del self._websocket_update_connections[guildid]
                     asyncio.create_task(self._on_update_disconnect(guildid))
-                    raise websockets.ConnectionClosed
+                    raise WebsocketClosed
                 except Exception as e:
                     del self._websocket_update_connections[guildid]
                     raise e
