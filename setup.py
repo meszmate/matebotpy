@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="matebotpy", 
-    version="0.0.7",
+    version="0.0.8",
     description="Python API Wrapper for Matebot.",
     author="Máté Mészáros",
     author_email="meszmatew@gmail.com",

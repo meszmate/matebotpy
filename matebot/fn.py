@@ -43,7 +43,7 @@ class FortniteClient:
         self._log: bool = log
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession("https://api.matebot.xyz/fn" if not base_url else base_url)
+        self.session = aiohttp.ClientSession("https://api.matebot.xyz/fn/" if not base_url else base_url)
         self._cache: Dict[str, FortniteCache] = {}
 
     def data(self, lang: str) -> FortniteCache:

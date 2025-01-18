@@ -21,7 +21,7 @@ class DashboardClient:
         self._websocket_event_connections: Dict[str, WebsocketClient] = {}
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession("https://api.matebot.xyz/dc" if not base_url else base_url)
+        self.session = aiohttp.ClientSession("https://api.matebot.xyz/dc/" if not base_url else base_url)
 
     def _get_headers(self):
         return {

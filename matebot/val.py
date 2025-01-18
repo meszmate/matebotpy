@@ -48,7 +48,7 @@ class ValorantClient:
         self._log: bool = log
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession("https://api.matebot.xyz/val" if not base_url else base_url)
+        self.session = aiohttp.ClientSession("https://api.matebot.xyz/val/" if not base_url else base_url)
         self._cache: Dict[str, ValorantCache] = {}
 
     def data(self, lang: str) -> ValorantCache:
