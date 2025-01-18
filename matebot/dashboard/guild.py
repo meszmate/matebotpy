@@ -8,12 +8,11 @@ from matebot.dashboard.slash import SlashCommands
 from matebot.dashboard.levels import LevelSettings
 from matebot.dashboard.giveaway import Giveaway
 from matebot.dashboard.tempchannels import TempChannelSettings
-from matebot.dash import DashboardClient
-from typing import List
+from typing import List, Any
 import asyncio
 
 class Guild:
-    def __init__(self, id: str, *, client: DashboardClient, fetch: bool=True, ws: bool = False):
+    def __init__(self, id: str, *, client: Any, fetch: bool=True, ws: bool = False):
         self.id: str = id
         self.owner: bool
         self.name: str
@@ -23,7 +22,7 @@ class Guild:
         self.voices: List[Channel]
         self.roles: List[Role]
         self.premium: bool
-        self._client: DashboardClient = client
+        self._client = client
         self._client.add_guild_update_handler(self.id, self._handle_updates)
         if fetch:
             asyncio.run(self.fetch())
