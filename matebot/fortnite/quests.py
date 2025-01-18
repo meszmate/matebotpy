@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Dict, Optional
-from matebot.fortnite import CosmeticIcon
+from matebot.fortnite.items import CosmeticIcon
 
 @dataclass
 class QuestsBundleItem:

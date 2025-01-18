@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from matebot.fortnite import CosmeticIcon, PrimarySecondaryColor
+from matebot.fortnite.items import CosmeticIcon
+from matebot.fortnite.base import PrimarySecondaryColor
 from typing import List, Dict
 
 @dataclass

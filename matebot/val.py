@@ -1,7 +1,6 @@
 import aiohttp
 from matebot.valorant import WebsocketEvent, Weapon, Buddy, Character, LevelBorder, PlayerCard, Spray, Theme, ContentTier, Bundle, Map
-from matebot.websocket import WebsocketClient
-from matebot import WebsocketClosed
+from matebot.websocket import WebsocketClient, WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 

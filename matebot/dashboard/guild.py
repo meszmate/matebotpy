@@ -1,5 +1,13 @@
 from matebot.dashboard.types import Channel, Role, Guild as GuildData
-from matebot.dashboard import Welcome, Defender, AutomationsData, WarnAutomation, Warn, Builtin, SlashCommands, LevelSettings, Giveaway, TempChannelSettings
+from matebot.dashboard.welcome import Welcome
+from matebot.dashboard.defender import Defender
+from matebot.dashboard.automations import AutomationsData
+from matebot.dashboard.moderation import WarnAutomation, Warn
+from matebot.dashboard.builtin import Builtin
+from matebot.dashboard.slash import SlashCommands
+from matebot.dashboard.levels import LevelSettings
+from matebot.dashboard.giveaway import Giveaway
+from matebot.dashboard.tempchannels import TempChannelSettings
 from matebot import DashboardClient
 from typing import List
 import asyncio

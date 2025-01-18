@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, List, Optional, Union
-from matebot.fortnite import Definition, NewDisplayAsset
+from matebot.fortnite.base import Definition
+from matebot.fortnite.newdisplayassets import NewDisplayAsset
 
 @dataclass
 class ItemShopEntryBundleItemInfo:

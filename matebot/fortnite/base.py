@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional, Any, Dict, Union
-from matebot.fortnite import Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno
+from matebot.fortnite.items import Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno
 
 @dataclass
 class PrimarySecondaryColor:

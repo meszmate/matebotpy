@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Dict, List
-from matebot.fortnite import Cosmetic, CarCosmetic, CosmeticVehicleVariant, Character, CosmeticVariantToken, Instrument, Juno
+from matebot.fortnite.items import Cosmetic, CarCosmetic, CosmeticVehicleVariant, Character, CosmeticVariantToken, Instrument, Juno
 
 @dataclass
 class Help:

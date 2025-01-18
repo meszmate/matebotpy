@@ -1,7 +1,6 @@
 import aiohttp
 from matebot.fortnite import WebsocketEvent, Cosmetics, NewDisplayAsset, Quests, Banners, SparkTrack, Banner, ItemShop, Stats
-from matebot.websocket import WebsocketClient
-from matebot import WebsocketClosed
+from matebot.websocket import WebsocketClient, WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 

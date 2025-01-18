@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List
-from matebot.dashboard.types import Action, Permission
+from matebot.dashboard.types.action import Action
+from matebot.dashboard.types.permission import Permission
 
 @dataclass
 class Emoji:

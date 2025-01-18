@@ -1,8 +1,7 @@
 import aiohttp
 from matebot.dashboard import Stats, User, GuildResponse, Guild
 from matebot.dashboard.types import Guild as GuildData
-from matebot.websocket import WebsocketClient
-from matebot import WebsocketClosed
+from matebot.websocket import WebsocketClient, WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 import websockets

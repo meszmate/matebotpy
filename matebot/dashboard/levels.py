@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 from matebot.dashboard.types import Image, Channels, DPermission, Action
-from matebot.dashboard import Message
+from matebot.dashboard.builtin import Message
 
 @dataclass
 class LevelMultiplier:

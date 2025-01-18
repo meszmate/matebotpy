@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict
-from matebot.valorant import XYValue, Position
+from matebot.valorant.base import Position
 
 @dataclass
 class DamageRange:

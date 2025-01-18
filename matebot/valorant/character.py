@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, List
-from matebot.valorant import XYValue
+from matebot.valorant.base import XYValue
 
 @dataclass
 class CharacterRole:
