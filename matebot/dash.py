@@ -4,7 +4,6 @@ from matebot.dashboard.types import Guild as GuildData
 from matebot.websocket import WebsocketClient, WebsocketClosed
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
-import websockets
 from dataclasses import asdict
 
 class DashboardClient:
@@ -113,11 +112,11 @@ class DashboardClient:
                 ws.onconnect = self._on_events_connect
                 try:
                     await ws.connect()
-                except websockets.ConnectionClosed:
+                except WebsocketClosed:
                     retries = 0
                     del self._websocket_update_connections[guildid]
                     asyncio.create_task(self._on_events_disconnect(guildid))
-                    raise websockets.ConnectionClosed
+                    raise WebsocketClosed
                 except Exception as e:
                     del self._websocket_update_connections[guildid]
                     raise e
