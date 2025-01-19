@@ -39,7 +39,7 @@ class ValorantCache:
         self.maps: List[Map]
 
 class ValorantClient:
-    def __init__(self, api_key: str, *, base_url: Optional[str] = None, log: bool = True):
+    def __init__(self, api_key: str, *, base_url: Optional[str] = None, log: bool = False):
         self._api_key = api_key
         self._base_url = "https://api.matebot.xyz/val/" if not base_url else base_url+"/"
         self._ws_listeners: List[Callable[[WebsocketEvent], None]] = []

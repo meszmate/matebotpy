@@ -145,16 +145,14 @@ asyncio.run(main())
 Example of listening to websocket events:
 
 ```py
-from matebot import DashboardClient, Notfound
+from matebot import DashboardClient
 import asyncio
 from typing import Dict
 
 client = DashboardClient("YOUR_AUTHORIZATION_TOKEN")
 
 async def on_event(guildid: str, data: Dict[str, str]):
-    if data["type"] == "PRINT_MESSAGE":
-        print(guildid, data["message"])
-
+    print(guildid, data["message"])
 
 client.add_guild_event_handler(on_event)
 
@@ -165,6 +163,6 @@ async def main():
 asyncio.run(main())
 ```
 
-# Support
+# Links
 - [Discord Server](https://dc.matebot.xyz/)
 - [Donate](https://www.paypal.com/donate/?hosted_button_id=A4G73GWEWSHLU)

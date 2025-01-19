@@ -2,10 +2,8 @@ name: matebotpy
 
 on:
   push:
-    branches:
-      - 'main'
     tags:
-      - '*'
+      - 'v*'
 
 
 jobs:

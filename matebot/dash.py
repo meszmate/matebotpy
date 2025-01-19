@@ -8,7 +8,7 @@ import asyncio
 from dataclasses import asdict
 
 class DashboardClient:
-    def __init__(self, token: str, *, base_url: Optional[str] = None, log: bool = True):
+    def __init__(self, token: str, *, base_url: Optional[str] = None, log: bool = False):
         self._token = token
         self._base_url = "https://api.matebot.xyz/dc/" if not base_url else base_url+"/"
         self._ws_guild_update_listeners: List[Callable[[str, GuildData], None]] = []
