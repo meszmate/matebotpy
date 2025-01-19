@@ -10,12 +10,19 @@ class PrimarySecondaryColor:
 @dataclass
 class WebsocketEventData:
     languages: List[str]
+    build: str
+    hash: str
+    platform: str
 
 @dataclass
 class WebsocketEvent:
     type: str
     data: WebsocketEventData
     timestamp: int
+
+    def __post_init__(self):
+        if isinstance(self.data, dict):
+            self.data = WebsocketEventData(**self.data)
 
 @dataclass
 class StatsTrack:

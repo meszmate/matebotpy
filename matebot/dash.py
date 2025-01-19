@@ -2,6 +2,7 @@ import aiohttp
 from matebot.dashboard import Stats, User, GuildResponse, Guild
 from matebot.dashboard.types import Guild as GuildData
 from matebot.websocket import WebsocketClient, WebsocketClosed
+from matebot.base import Notfound, NotLoaded
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 from dataclasses import asdict
@@ -24,11 +25,8 @@ class DashboardClient:
         self.retry_delay: int = 180
         self.session: Optional[aiohttp.ClientSession] = None
     
-    async def _initialize(self) -> None:
+    async def init(self) -> None:
         self.session = aiohttp.ClientSession(self._base_url)
-
-    def init(self) -> None:
-        asyncio.run(self._initialize())
 
     def _get_headers(self):
         return {
@@ -40,6 +38,10 @@ class DashboardClient:
         async with self.session.request(method,url,headers=self._get_headers() if auth else None, json=asdict(data) if data else None) as response:
             if response.status == 200:
                 return await response.json()
+            elif response.status == 404:
+                raise Notfound()
+            elif response.status == 503:
+                raise NotLoaded()
             else:
                 raise Exception(f"Request failed: {response.status} - {await response.text()}")
 
@@ -87,7 +89,7 @@ class DashboardClient:
                     retries = 0
                     del self._websocket_update_connections[guildid]
                     asyncio.create_task(self._on_update_disconnect(guildid))
-                    raise WebsocketClosed
+                    raise WebsocketClosed()
                 except Exception as e:
                     del self._websocket_update_connections[guildid]
                     raise e
@@ -124,7 +126,7 @@ class DashboardClient:
                     retries = 0
                     del self._websocket_update_connections[guildid]
                     asyncio.create_task(self._on_events_disconnect(guildid))
-                    raise WebsocketClosed
+                    raise WebsocketClosed()
                 except Exception as e:
                     del self._websocket_update_connections[guildid]
                     raise e

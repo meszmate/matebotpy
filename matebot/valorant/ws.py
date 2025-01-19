@@ -32,3 +32,7 @@ class WebsocketEvent:
     type: str
     data: WebsocketEventData
     timestamp: int
+
+    def __post_init__(self):
+        if isinstance(self.data, dict):
+            self.data = WebsocketEventData(**self.data)

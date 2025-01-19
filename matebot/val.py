@@ -1,6 +1,7 @@
 import aiohttp
 from matebot.valorant import WebsocketEvent, Weapon, Buddy, Character, LevelBorder, PlayerCard, Spray, Theme, ContentTier, Bundle, Map
 from matebot.websocket import WebsocketClient, WebsocketClosed
+from matebot.base import Notfound, NotLoaded
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
 
@@ -52,11 +53,8 @@ class ValorantClient:
         self.session: Optional[aiohttp.ClientSession] = None
         self._cache: Dict[str, ValorantCache] = {}
     
-    async def _initialize(self) -> None:
+    async def init(self) -> None:
         self.session = aiohttp.ClientSession(self._base_url)
-
-    def init(self) -> None:
-        asyncio.run(self._initialize())
 
     def data(self, lang: str) -> ValorantCache:
         return self._cache[lang]
@@ -167,6 +165,10 @@ class ValorantClient:
         async with self.session.request(method,url,headers=self._get_headers() if auth else None) as response:
             if response.status == 200:
                 return await response.json()
+            elif response.status == 404:
+                raise Notfound()
+            elif response.status == 503:
+                raise NotLoaded()
             else:
                 raise Exception(f"Request failed: {response.status} - {await response.text()}")
 
@@ -205,7 +207,7 @@ class ValorantClient:
                     retries = 0
                     self._websocket_connection = None
                     asyncio.create_task(self._on_disconnect())
-                    raise WebsocketClosed
+                    raise WebsocketClosed()
                 except Exception as e:
                     self._websocket_connection = None
                     raise e
