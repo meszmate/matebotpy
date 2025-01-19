@@ -26,7 +26,7 @@ ValorantLanguages = [
 class ValorantCache:
     def __init__(self):
         self.weapons: List[Weapon]
-        self.meele: Weapon
+        self.melee: Weapon
         self.buddies: List[Buddy]
         self.characters: List[Character]
         self.levelborders: List[LevelBorder]
@@ -63,7 +63,7 @@ class ValorantClient:
         newCache = ValorantCache()
         (
             newCache.weapons,
-            newCache.meele,
+            newCache.melee,
             newCache.buddies,
             newCache.characters,
             newCache.levelborders,
@@ -75,7 +75,7 @@ class ValorantClient:
             newCache.maps,
         ) = await asyncio.gather(
             self.fetch_weapons(lang=lang),
-            self.fetch_meele(lang=lang),
+            self.fetch_melee(lang=lang),
             self.fetch_buddies(lang=lang),
             self.fetch_characters(lang=lang),
             self.fetch_levelborders(lang=lang),
@@ -99,7 +99,7 @@ class ValorantClient:
         elif event.type == "WEAPONS":
             func = self.fetch_weapons
         elif event.type == "MEELE":
-            func = self.fetch_meele
+            func = self.fetch_melee
         elif event.type == "BUDDIES":
             func = self.fetch_buddies
         elif event.type == "LEVELBORDERS":
@@ -131,8 +131,8 @@ class ValorantClient:
                 self._cache[lang].characters = result
             elif event.type == "WEAPONS":
                 self._cache[lang].weapons = result
-            elif event.type == "MEELE":
-                self._cache[lang].meele = result
+            elif event.type == "MELEE":
+                self._cache[lang].melee = result
             elif event.type == "BUDDIES":
                 self._cache[lang].buddies = result
             elif event.type == "LEVELBORDERS":
@@ -216,8 +216,8 @@ class ValorantClient:
     async def fetch_weapons(self, lang: Optional[str]=None) -> List[Weapon]:
         return [Weapon(**weapon) for weapon in await self._request("get", "/weapons", lang=lang)]
     
-    async def fetch_meele(self, lang: Optional[str]=None) -> Weapon:
-        return Weapon(**await self._request("get", "/meele", lang=lang))
+    async def fetch_melee(self, lang: Optional[str]=None) -> Weapon:
+        return Weapon(**await self._request("get", "/melee", lang=lang))
     
     async def fetch_buddies(self, lang: Optional[str]=None) -> List[Buddy]:
         return [Buddy(**buddy) for buddy in await self._request("get", "/buddies", lang=lang)]
