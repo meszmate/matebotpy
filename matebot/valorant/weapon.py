@@ -89,7 +89,8 @@ class WeaponShopData:
     grid: WeaponShopDataGrid
 
     def __post_init__(self):
-        self.grid = WeaponShopData(**self.grid) if isinstance(self.grid, dict) else self.grid
+        if isinstance(self.grid, dict):
+            self.grid = WeaponShopDataGrid(**self.grid)
 
 @dataclass
 class Weapon:
