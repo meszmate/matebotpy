@@ -9,6 +9,7 @@ from dataclasses import asdict
 class DashboardClient:
     def __init__(self, token: str, *, base_url: Optional[str] = None, log: bool = True):
         self._token = token
+        self._base_url = "https://api.matebot.xyz/dc/" if not base_url else base_url+"/"
         self._ws_guild_update_listeners: List[Callable[[str, GuildData], None]] = []
         self._ws_guild_update_connect: List[Callable[[str], None]] = []
         self._ws_guild_update_disconnect: List[Callable[[str], None]] = []
@@ -21,7 +22,11 @@ class DashboardClient:
         self._websocket_event_connections: Dict[str, WebsocketClient] = {}
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession("https://api.matebot.xyz/dc/" if not base_url else base_url)
+        self.session: Optional[aiohttp.ClientSession] = None
+        asyncio.run(self._initialize())
+    
+    async def _initialize(self) -> None:
+        self.session = aiohttp.ClientSession(self._base_url)
 
     def _get_headers(self):
         return {

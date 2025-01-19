@@ -40,6 +40,7 @@ class ValorantCache:
 class ValorantClient:
     def __init__(self, api_key: str, *, base_url: Optional[str] = None, log: bool = True):
         self._api_key = api_key
+        self._base_url = "https://api.matebot.xyz/val/" if not base_url else base_url+"/"
         self._ws_listeners: List[Callable[[WebsocketEvent], None]] = []
         self._ws_connect: List[Callable[[], None]] = []
         self._ws_disconnect: List[Callable[[], None]] = []
@@ -48,8 +49,12 @@ class ValorantClient:
         self._log: bool = log
         self.max_retries: int = 10
         self.retry_delay: int = 180
-        self.session = aiohttp.ClientSession("https://api.matebot.xyz/val/" if not base_url else base_url)
+        self.session: Optional[aiohttp.ClientSession] = None
         self._cache: Dict[str, ValorantCache] = {}
+        asyncio.run(self._initialize())
+    
+    async def _initialize(self) -> None:
+        self.session = aiohttp.ClientSession(self._base_url)
 
     def data(self, lang: str) -> ValorantCache:
         return self._cache[lang]
