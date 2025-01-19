@@ -36,6 +36,7 @@ class WebsocketClient:
                     asyncio.create_task(self.onconnect(self.id))
                 asyncio.create_task(self._heartbeat())
                 async for msg in ws:
+                    print("message received")
                     if msg.type == aiohttp.WSMsgType.TEXT:
                         await self._handle_messages(self.id, json.loads(msg.data))
                     elif msg.type == aiohttp.WSMsgType.CLOSED:
