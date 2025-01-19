@@ -9,7 +9,7 @@ class WebsocketClosed(Exception):
         super().__init__(message)
 
 class WebsocketClient:
-    def __init__(self, uri: str):
+    def __init__(self, uri: str, *, session: aiohttp.ClientSession):
         self._uri = uri
         self.onconnect: Optional[Callable[[str], None]] = None
         self.on_message: Optional[Callable[[str, Any], None]] = None
@@ -17,6 +17,7 @@ class WebsocketClient:
         self.id: str = ""
         self.websocket: Optional[aiohttp.ClientWebSocketResponse] = None
         self.heartbeat_interval: int = 20
+        self.session = session
 
     async def _handle_messages(self, id: str, data: Any):
         if self.on_message:
@@ -29,19 +30,18 @@ class WebsocketClient:
                 await self.websocket.send_str(json.dumps({"type": "HEARTBEAT"}))
 
     async def connect(self):
-        async with aiohttp.ClientSession() as session:
-            async with session.ws_connect(self._uri) as ws:
-                self.websocket = ws
-                if self.onconnect:
-                    asyncio.create_task(self.onconnect(self.id))
-                asyncio.create_task(self._heartbeat())
-                async for msg in ws:
-                    if msg.type == aiohttp.WSMsgType.TEXT:
-                        await self._handle_messages(self.id, json.loads(msg.data))
-                    elif msg.type == aiohttp.WSMsgType.CLOSED:
-                        raise WebsocketClosed
-                    elif msg.type == aiohttp.WSMsgType.ERROR:
-                        raise Exception(f"WebSocket error: {msg.data}")
+        async with self.session.ws_connect(self._uri) as ws:
+            self.websocket = ws
+            if self.onconnect:
+                asyncio.create_task(self.onconnect(self.id))
+            asyncio.create_task(self._heartbeat())
+            async for msg in ws:
+                if msg.type == aiohttp.WSMsgType.TEXT:
+                    await self._handle_messages(self.id, json.loads(msg.data))
+                elif msg.type == aiohttp.WSMsgType.CLOSED:
+                    raise WebsocketClosed
+                elif msg.type == aiohttp.WSMsgType.ERROR:
+                    raise Exception(f"WebSocket error: {msg.data}")
     
     async def close(self):
         await self.websocket.close()

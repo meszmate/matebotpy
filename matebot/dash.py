@@ -79,7 +79,7 @@ class DashboardClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/ws?auth="+self._token)
+                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/ws?auth="+self._token, session=self.session)
                 self._websocket_update_connections[guildid] = ws
                 ws.on_message = self._on_update_message
                 ws.onconnect = self._on_update_connect
@@ -122,7 +122,7 @@ class DashboardClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self.base_url.replace("https", "wss")+"/dashboard/"+guildid+"/events")
+                ws = WebsocketClient(self._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/events?auth="+self._token, session=self.session)
                 self._websocket_event_connections[guildid] = ws
                 ws.on_message = self._on_events_message
                 ws.onconnect = self._on_events_connect
