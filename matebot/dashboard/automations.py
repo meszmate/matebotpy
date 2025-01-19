@@ -47,6 +47,15 @@ class MessageAutomation:
     isglobal: bool
     shared: bool
 
+    def __post_init__(self):
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+        
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        
+        if isinstance(self.channels, dict):
+            self.channels = Channels(**self.channels)
+
 @dataclass
 class Automation:
     """
@@ -96,6 +105,9 @@ class Automation:
     def remove_action(self, index: int) -> None:
         del self.actions[index]
 
+    def __post_init__(self):
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+
 @dataclass
 class AutomationsData:
     message: List[MessageAutomation]
@@ -122,3 +134,7 @@ class AutomationsData:
     
     def remove_automation(self, index: int) -> None:
         del self.normal[index]
+
+    def __post_init__(self):
+        self.message = [MessageAutomation(**msg) if isinstance(msg, dict) else msg for msg in self.message]
+        self.normal = [Automation(**auto) if isinstance(auto, dict) else auto for auto in self.normal]

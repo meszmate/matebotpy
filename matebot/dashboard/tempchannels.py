@@ -22,6 +22,9 @@ class TempChannel:
 
     def remove_action(self, index: int) -> None:
         del self.actions[index]
+
+    def __post_init__(self):
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
     
 @dataclass
 class TempChannelSettings:
@@ -43,3 +46,6 @@ class TempChannelSettings:
     
     def remove_channel_by_id(self, id: str) -> None:
         self.channels = [ch for ch in self.channels if ch.channelid != id]
+
+    def __post_init__(self):
+        self.channels = [TempChannel(**channel) if isinstance(channel, dict) else channel for channel in self.channels]

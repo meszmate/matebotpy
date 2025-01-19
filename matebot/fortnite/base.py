@@ -35,4 +35,7 @@ class Stats:
     stats: Dict[str, Any]
     ranks: List[StatsTrack]
 
+    def __post_init__(self):
+        self.ranks = [StatsTrack(**track) if isinstance(track, dict) else track for track in self.ranks]
+
 Definition = Union[Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno]

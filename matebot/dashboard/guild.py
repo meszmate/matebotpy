@@ -12,7 +12,7 @@ from typing import List, Any
 import asyncio
 
 class Guild:
-    def __init__(self, id: str, *, client: Any, fetch: bool=True, ws: bool = False):
+    def __init__(self, id: str, *, client: Any):
         self.id: str = id
         self.owner: bool
         self.name: str
@@ -24,10 +24,6 @@ class Guild:
         self.premium: bool
         self._client = client
         self._client.add_guild_update_handler(self.id, self._handle_updates)
-        if fetch:
-            asyncio.run(self.fetch())
-            if ws:
-                self._ws = asyncio.create_task(self.start_handle_updates())
 
     async def fetch(self) -> None:
         g = await self._client._fetch_guild(self.id)

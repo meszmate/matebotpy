@@ -32,26 +32,38 @@ class Form:
 @dataclass
 class ActionStruct:
     actions: List[Action]
-    title: str
-    forms: List[Form]
 
     def add_action(self, action: Action) -> None:
         self.actions.append(action)
     
-    def set_action(self, actions: List[Action]) -> None:
+    def set_actions(self, actions: List[Action]) -> None:
         self.actions = actions
+    
+    def set_action(self, index: int, action: Action) -> None:
+        self.actions[index] = action
     
     def remove_action(self, index: int) -> None:
         del self.actions[index]
+
+    title: str
+
+    forms: List[Form]
 
     def add_form(self, form: Form) -> None:
         self.forms.append(form)
     
     def set_forms(self, forms: List[Form]) -> None:
         self.forms = forms
+
+    def set_form(self, index: int, form: Form) -> None:
+        self.forms[index] = form
     
     def remove_form(self, index: int) -> None:
         del self.forms[index]
+    
+    def __post_init__(self):
+        self.forms = [Form(**form) if isinstance(form, dict) else form for form in self.forms]
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
 
 @dataclass
 class Button:
@@ -80,53 +92,6 @@ class Button:
     isglobal: bool
     shared: bool
     permission: Permission
-
-    def add_error_action(self, action: Action) -> None:
-        self.erractions.append(action)
-    
-    def set_error_actions(self, actions: List[Action]) -> None:
-        self.erractions = actions
-    
-    def remove_error_action(self, index: int) -> None:
-        del self.erractions[index]
-    
-    def add_permission_action(self, action: Action) -> None:
-        self.permactions.append(action)
-    
-    def set_permission_actions(self, actions: List[Action]) -> None:
-        self.permactions = actions
-    
-    def remove_permission_action(self, index: int) -> None:
-        del self.permactions[index]
-
-    def add_cooldown_action(self, action: Action) -> None:
-        self.cooldownactions.append(action)
-    
-    def set_cooldown_actions(self, actions: List[Action]) -> None:
-        self.cooldownactions = actions
-    
-    def remove_cooldown_action(self, index: int) -> None:
-        del self.cooldownactions[index]
-    
-    def set_permission(self, perm: Permission) -> None:
-        self.permission = perm
-    
-    def set_emoji(self, emoji: Emoji) -> None:
-        self.emoji = emoji
-
-@dataclass
-class Option:
-    label: str
-    description: str
-    emoji: Emoji
-    permission: Permission
-    action: ActionStruct
-    erractions: List[Action]
-    permactions: List[Action]
-    cooldownactions: List[Action]
-    cooldown: int
-    isglobal: bool
-    shared: bool
 
     def add_error_action(self, action: Action) -> None:
         self.erractions.append(action)
@@ -170,6 +135,71 @@ class Option:
     def set_emoji(self, emoji: Emoji) -> None:
         self.emoji = emoji
 
+    def __post_init__(self):
+        if isinstance(self.emoji, dict):
+            self.emoji = Emoji(**self.emoji)
+        if isinstance(self.action, dict):
+            self.action = ActionStruct(**self.action)
+        self.erractions = [Action(**action) if isinstance(action, dict) else action for action in self.erractions]
+        self.permactions = [Action(**action) if isinstance(action, dict) else action for action in self.permactions]
+        self.cooldownactions = [Action(**action) if isinstance(action, dict) else action for action in self.cooldownactions]
+
+@dataclass
+class Option:
+    label: str
+    description: str
+    emoji: Emoji
+    permission: Permission
+    action: ActionStruct
+    erractions: List[Action]
+    permactions: List[Action]
+    cooldownactions: List[Action]
+    cooldown: int
+    isglobal: bool
+    shared: bool
+    
+    def remove_error_action(self, index: int) -> None:
+        del self.erractions[index]
+    
+    def add_permission_action(self, action: Action) -> None:
+        self.permactions.append(action)
+    
+    def set_permission_actions(self, actions: List[Action]) -> None:
+        self.permactions = actions
+    
+    def set_permission_action(self, index: int, action: Action) -> None:
+        self.permactions[index] = action
+    
+    def remove_permission_action(self, index: int) -> None:
+        del self.permactions[index]
+
+    def add_cooldown_action(self, action: Action) -> None:
+        self.cooldownactions.append(action)
+    
+    def set_cooldown_actions(self, actions: List[Action]) -> None:
+        self.cooldownactions = actions
+    
+    def set_cooldown_action(self, index: int, action: Action) -> None:
+        self.cooldownactions[index] = action
+    
+    def remove_cooldown_action(self, index: int) -> None:
+        del self.cooldownactions[index]
+    
+    def set_permission(self, perm: Permission) -> None:
+        self.permission = perm
+    
+    def set_emoji(self, emoji: Emoji) -> None:
+        self.emoji = emoji
+
+    def __post_init__(self):
+        if isinstance(self.emoji, dict):
+            self.emoji = Emoji(**self.emoji)
+        if isinstance(self.action, dict):
+            self.action = ActionStruct(**self.action)
+        self.erractions = [Action(**action) if isinstance(action, dict) else action for action in self.erractions]
+        self.permactions = [Action(**action) if isinstance(action, dict) else action for action in self.permactions]
+        self.cooldownactions = [Action(**action) if isinstance(action, dict) else action for action in self.cooldownactions]
+
 @dataclass
 class SelectMenu:
     """
@@ -201,6 +231,9 @@ class SelectMenu:
     def remove_option(self, index: int) -> None:
         del self.options[index]
 
+    def __post_init__(self):
+        self.options = [Option(**option) if isinstance(option, dict) else option for option in self.options]
+
 @dataclass
 class ActionRow:
     """
@@ -227,6 +260,11 @@ class ActionRow:
     def remove_button(self, index: Button) -> None:
         del self.buttons[index]
 
+    def __post_init__(self):
+        self.buttons = [Button(**button) if isinstance(button, dict) else button for button in self.buttons]
+        if isinstance(self.selectmenu, dict):
+            self.selectmenu = SelectMenu(**self.selectmenu)
+
 @dataclass
 class PageButton:
     """
@@ -244,6 +282,10 @@ class PageButton:
     count: str
     button: Button
 
+    def __post_init__(self):
+        if isinstance(self.button, dict):
+            self.button = Button(**self.button)
+
 @dataclass
 class PageOption:
     """
@@ -260,6 +302,10 @@ class PageOption:
     
     count: str
     option: Option
+
+    def __post_init__(self):
+        if isinstance(self.option, dict):
+            self.option = Option(**self.option)
 
 @dataclass
 class PageSelectMenu:
@@ -281,6 +327,9 @@ class PageSelectMenu:
     def remove_option(self, index: PageOption) -> None:
         del self.options[index]
 
+    def __post_init__(self):
+        self.options = [PageOption(**option) if isinstance(option, dict) else option for option in self.options]
+
 @dataclass
 class PageActionRow:
     type: int
@@ -299,3 +348,8 @@ class PageActionRow:
     
     def remove_button(self, index: PageButton) -> None:
         del self.buttons[index]
+
+    def __post_init__(self):
+        self.buttons = [PageButton(**button) if isinstance(button, dict) else button for button in self.buttons]
+        if isinstance(self.selectmenu, dict):
+            self.selectmenu = PageSelectMenu(**self.selectmenu)

@@ -17,6 +17,12 @@ class LevelMultiplier:
 
     amount: float
 
+    def __post_init__(self):
+        if isinstance(self.channels, dict):
+            self.channels = Channels(**self.channels) 
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission) 
+
 @dataclass
 class LevelAutomation:
     level: str
@@ -39,6 +45,11 @@ class LevelAutomation:
 
     def remove_action(self, index: int) -> None:
         del self.actions[index]
+    
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission) 
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
 
 @dataclass
 class LevelSettings:
@@ -60,3 +71,11 @@ class LevelSettings:
     imagedata: Image
     multipliers: List[LevelMultiplier]
     automations: List[LevelAutomation]
+
+    def __post_init__(self):
+        self.multipliers = [LevelMultiplier(**multiplier) if isinstance(multiplier, dict) else multiplier for multiplier in self.multipliers]
+        self.automations = [LevelAutomation(**automation) if isinstance(automation, dict) else automation for automation in self.automations]
+        if isinstance(self.message, dict):
+            self.message = Message(**self.message)
+        if isinstance(self.imagedata, dict):
+            self.imagedata = Image(**self.imagedata)

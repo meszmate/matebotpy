@@ -43,6 +43,12 @@ class WelcomeMessage:
     def set_image(self, image: Image) -> None:
         self.image = image
 
+    def __post_init__(self):
+        self.embeds = [Embed(**embed) if isinstance(embed, dict) else embed for embed in self.embeds]
+        self.actionrows = [ActionRow(**row) if isinstance(row, dict) else row for row in self.actionrows]
+        if isinstance(self.imagedata, dict):
+            self.imagedata = Image(**self.imagedata)
+
 @dataclass
 class GoodbyeMessage:
     message: bool
@@ -83,6 +89,11 @@ class GoodbyeMessage:
     def set_image(self, image: Image) -> None:
         self.image = image
 
+    def __post_init__(self):
+        self.embeds = [Embed(**embed) if isinstance(embed, dict) else embed for embed in self.embeds]
+        self.actionrows = [ActionRow(**row) if isinstance(row, dict) else row for row in self.actionrows]
+        if isinstance(self.imagedata, dict):
+            self.imagedata = Image(**self.imagedata)
 
 @dataclass
 class WelcomePrivateMessage:
@@ -123,6 +134,11 @@ class WelcomePrivateMessage:
     def set_image(self, image: Image) -> None:
         self.image = image
 
+    def __post_init__(self):
+        self.embeds = [Embed(**embed) if isinstance(embed, dict) else embed for embed in self.embeds]
+        self.actionrows = [ActionRow(**row) if isinstance(row, dict) else row for row in self.actionrows]
+        if isinstance(self.imagedata, dict):
+            self.imagedata = Image(**self.imagedata)
 
 @dataclass
 class Welcome:
@@ -140,3 +156,11 @@ class Welcome:
     
     def set_private(self, private: WelcomePrivateMessage) -> None:
         self.private = private
+
+    def __post_init__(self):
+        if isinstance(self.welcome, dict):
+            self.welcome = WelcomeMessage(**self.welcome)
+        if isinstance(self.goodbye, dict):
+            self.goodbye = GoodbyeMessage(**self.goodbye)
+        if isinstance(self.welcome, dict):
+            self.private = WelcomePrivateMessage(**self.private)

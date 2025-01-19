@@ -25,6 +25,12 @@ class CosmeticIconLego:
     first: CosmeticIconLegoElement
     second: CosmeticIconLegoElement
 
+    def __post_init__(self):
+        if isinstance(self.first, dict):
+            self.first = CosmeticIconLegoElement(**self.first)
+        if isinstance(self.second, dict):
+            self.second = CosmeticIconLegoElement(**self.second)
+
 @dataclass
 class CosmeticIcon:
     small: str
@@ -53,6 +59,11 @@ class Cosmetic:
     tags: List[str]
     icon: CosmeticIcon
 
+    def __post_init__(self):
+        self.variants = [CosmeticVariant(**variant) for variant in self.variants]
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)
+
 @dataclass
 class Character:
     name: str
@@ -66,6 +77,15 @@ class Character:
     bean: Optional[CosmeticIcon]
     lego: Optional[CosmeticIconLego]
 
+    def __post_init__(self):
+        self.variants = [CosmeticVariant(**variant) for variant in self.variants]
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)
+        if self.bean and isinstance(self.bean, dict):
+            self.bean = CosmeticIcon(**self.bean)
+        if self.lego and isinstance(self.lego, dict):
+            self.lego = CosmeticIconLego(**self.lego)
+
 @dataclass
 class Juno:
     id: str
@@ -73,6 +93,10 @@ class Juno:
     rarity: str
     tags: List[str]
     icon: CosmeticIcon
+
+    def __post_init__(self):
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)
 
 @dataclass
 class CarCosmetic:
@@ -82,6 +106,11 @@ class CarCosmetic:
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
+
+    def __post_init__(self):
+        self.variants = [CosmeticVariant(**variant) for variant in self.variants]
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)
 
 @dataclass
 class CosmeticVariantToken:
@@ -93,6 +122,10 @@ class CosmeticVariantToken:
     shortDescription: str
     tags: List[str]
     icon: CosmeticIcon
+
+    def __post_init__(self):
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)
 
 @dataclass
 class CosmeticVehicleVariantAdditional:
@@ -110,6 +143,9 @@ class CosmeticVehicleVariant:
     rarity: str
     additional: List[CosmeticVehicleVariantAdditional]
 
+    def __post_init__(self):
+        self.additional = [CosmeticVehicleVariantAdditional(**additional) for additional in self.additional]
+
 @dataclass
 class Instrument:
     name: str
@@ -119,3 +155,8 @@ class Instrument:
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
+
+    def __post_init__(self):
+        self.variants = [CosmeticVariant(**variant) for variant in self.variants]
+        if isinstance(self.icon, dict):
+            self.icon = CosmeticIcon(**self.icon)

@@ -108,6 +108,9 @@ class SlashCommandOption:
         
     required: bool
 
+    def __post_init__(self):
+        self.choices = [SlashCommandOptionChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
+
 @dataclass
 class SlashCommand:
     name: str
@@ -208,6 +211,14 @@ class SlashCommand:
     shared: bool
     id: str
 
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+        self.erractions = [Action(**action) if isinstance(action, dict) else action for action in self.erractions]
+        self.permactions = [Action(**action) if isinstance(action, dict) else action for action in self.permactions]
+        self.cooldownactions = [Action(**action) if isinstance(action, dict) else action for action in self.cooldownactions]
+
 @dataclass
 class Localization:
     """
@@ -261,3 +272,7 @@ class SlashCommands:
     
     def remove_localization(self, index: int) -> None:
         del self.localizations[index]
+
+    def __post_init__(self):
+        self.commands = [SlashCommand(**command) if isinstance(command, dict) else command for command in self.commands]
+        self.localizations = [Localization(**localization) if isinstance(localization, dict) else localization for localization in self.localizations]

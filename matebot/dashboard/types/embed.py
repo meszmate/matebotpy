@@ -27,6 +27,10 @@ class EmbedAuthor:
     def set_icon(self, icon: EmbedImage) -> None:
         self.icon = icon
 
+    def __post_init__(self):
+        if isinstance(self.icon, dict):
+            self.icon = EmbedImage(**self.icon)
+
 @dataclass
 class EmbedFooter:
     text: str
@@ -34,6 +38,10 @@ class EmbedFooter:
 
     def set_icon(self, icon: EmbedImage) -> None:
         self.icon = icon
+
+    def __post_init__(self):
+        if isinstance(self.icon, dict):
+            self.icon = EmbedImage(**self.icon)
 
 @dataclass
 class EmbedField:
@@ -65,3 +73,17 @@ class Embed:
     
     def remove_field(self, index: int) -> None:
         del self.fields[index]
+    
+    def __post_init__(self):
+        if isinstance(self.footer, dict):
+            self.footer = EmbedFooter(**self.footer)
+        if isinstance(self.author, dict):
+            self.author = EmbedAuthor(**self.author)
+        if isinstance(self.image, dict):
+            self.image = EmbedImage(**self.image)
+        if isinstance(self.thumbnail, dict):
+            self.thumbnail = EmbedImage(**self.thumbnail)
+        self.fields = [
+            EmbedField(**field) if isinstance(field, dict) else field
+            for field in self.fields
+        ]

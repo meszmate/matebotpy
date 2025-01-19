@@ -24,6 +24,11 @@ class DefenderDefault:
 
     def set_permission(self, permission: DPermission) -> None:
         self.permission = permission
+    
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
 
 @dataclass
 class DefenderMessage:
@@ -52,8 +57,23 @@ class DefenderMessage:
     def set_channels(self, channels: Channels) -> None:
         self.channels = channels
 
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        if isinstance(self.channels, dict):
+            self.channels = Channels(**self.channels)
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+
 @dataclass
 class Defender:
     ban: DefenderDefault
     kick: DefenderDefault
     invite: DefenderMessage
+
+    def __post_init__(self):
+        if isinstance(self.ban, dict):
+            self.ban = DefenderDefault(**self.ban)
+        if isinstance(self.kick, dict):
+            self.kick = DefenderDefault(**self.kick)
+        if isinstance(self.invite, dict):
+            self.invite = DefenderMessage(**self.invite)

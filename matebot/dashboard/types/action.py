@@ -134,6 +134,10 @@ class ActionMessage:
     def del_delchoice(self, index: int) -> None:
         del self.delchoices[index]
 
+    def __post_init__(self):
+        self.choices = [ActionMessageChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
+        self.delchoices = [ActionMessageDeleteChoice(**delchoice) if isinstance(delchoice, dict) else delchoice for delchoice in self.delchoices]
+
 @dataclass
 class ActionRoleChoice:
     member: str
@@ -191,6 +195,9 @@ class ActionRole:
     
     def del_manage_choice(self, index: int) -> None:
         del self.roles[index]
+
+    def __post_init__(self):
+        self.choices = [ActionRoleChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
 
 @dataclass
 class ActionChannelChoice:
@@ -287,6 +294,10 @@ class ActionChannel:
     def del_edit_choice(self, index: int) -> None:
         del self.editchoices[index]
 
+    def __post_init__(self):
+        self.choices = [ActionChannelChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
+        self.editchoices = [ActionChannelEditChoice(**choice) if isinstance(choice, dict) else choice for choice in self.editchoices]
+
 @dataclass
 class ActionBan:
     user: str
@@ -361,6 +372,9 @@ class ActionWebsocket:
     def remove_field(self, index: int) -> None:
         del self.fields[index]
 
+    def __post_init__(self):
+        self.fields = [ActionWebsocketField(**field) if isinstance(field, dict) else field for field in self.fields]
+
 @dataclass
 class ActionWarning:
     """
@@ -412,6 +426,9 @@ class ActionReaction:
     
     def remove_choice(self, index: int) -> None:
         del self.choices[index]
+    
+    def __post_init__(self):
+        self.choices = [ActionReactionChoice(**choice) if isinstance(choice, dict) else choice for choice in self.choices]
 
 @dataclass
 class ActionXP:
@@ -487,3 +504,31 @@ class Action:
     reaction: Optional[ActionReaction]
     xp: Optional[ActionXP]
     economy: Optional[ActionEconomy]
+
+    def __post_init__(self):
+        if isinstance(self.message, dict):
+            self.message = ActionMessage(**self.message)
+        if isinstance(self.role, dict):
+            self.role = ActionRole(**self.role)
+        if isinstance(self.channel, dict):
+            self.channel = ActionChannel(**self.channel)
+        if isinstance(self.ban, dict):
+            self.ban = ActionBan(**self.ban)
+        if isinstance(self.unban, dict):
+            self.unban = ActionUnban(**self.unban)
+        if isinstance(self.kick, dict):
+            self.kick = ActionKick(**self.kick)
+        if isinstance(self.mute, dict):
+            self.mute = ActionMute(**self.mute)
+        if isinstance(self.giveaway, dict):
+            self.giveaway = ActionGiveaway(**self.giveaway)
+        if isinstance(self.websocket, dict):
+            self.websocket = ActionWebsocket(**self.websocket)
+        if isinstance(self.warning, dict):
+            self.warning = ActionWarning(**self.warning)
+        if isinstance(self.reaction, dict):
+            self.reaction = ActionReaction(**self.reaction)
+        if isinstance(self.xp, dict):
+            self.xp = ActionXP(**self.xp)
+        if isinstance(self.economy, dict):
+            self.economy = ActionEconomy(**self.economy)

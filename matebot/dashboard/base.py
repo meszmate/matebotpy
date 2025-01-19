@@ -30,3 +30,7 @@ class Guild:
 class GuildResponse:
     guilds: List[Guild]
     guildsnot: List[Guild]
+
+    def __post_init__(self):
+        self.guilds = [Guild(**g) if isinstance(g, dict) else g for g in self.guilds]
+        self.guildsnot = [Guild(**g) if isinstance(g, dict) else g for g in self.guildsnot]

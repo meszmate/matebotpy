@@ -28,6 +28,11 @@ class WarnAutomation:
     def remove_action(self, index: int) -> None:
         del self.actions[index]
 
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+
 @dataclass
 class Warn:
     """

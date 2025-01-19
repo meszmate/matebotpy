@@ -40,6 +40,10 @@ class ItemShopEntryItem:
     quantity: str
     definition: Optional[Definition]
 
+    def __post_init__(self):
+        if self.definition:
+            self.definition = Definition(**self.definition)
+
 @dataclass
 class ItemShopEntryPrice:
     basePrice: float
@@ -79,10 +83,24 @@ class ItemShopEntry:
     items: List[ItemShopEntryItem]
     additionalGrants: List[Any]
 
+    def __post_init__(self):
+        if isinstance(self.bundleInfo, dict):
+            self.bundleInfo = ItemShopEntryBundleItemInfo(**self.bundleInfo)
+
+        self.prices = [ItemShopEntryPrice(**price) for price in self.prices]
+        self.items = [ItemShopEntryItem(**item) for item in self.items]
+        self.requirements = [ItemShopEntryGrant(**grant) for grant in self.requirements]
+
+        if self.baseItem:
+            self.baseItem = Definition(**self.baseItem)
+
 @dataclass
 class ItemShopRow:
     layoutId: str
     entries: List[ItemShopEntry]
+
+    def __post_init__(self):
+        self.entries = [ItemShopEntry(**entry) for entry in self.entries]
 
 @dataclass
 class ItemShopSection:
@@ -91,10 +109,16 @@ class ItemShopSection:
     sectionId: str
     rows: List[ItemShopRow]
 
+    def __post_init__(self):
+        self.rows = [ItemShopRow(**row) for row in self.rows]
+
 @dataclass
 class ItemShopCategory:
     name: str
     sections: List[ItemShopSection]
+
+    def __post_init__(self):
+        self.sections = [ItemShopSection(**section) for section in self.sections]
 
 @dataclass
 class ItemShop:
@@ -102,3 +126,6 @@ class ItemShop:
     dailyPurchaseHours: float
     expiration: str
     categories: List[ItemShopCategory]
+    
+    def __post_init__(self):
+        self.categories = [ItemShopCategory(**category) for category in self.categories]

@@ -11,6 +11,10 @@ class GiveawayMultiplier:
     def set_permission(self, permission: DPermission) -> None:
         self.permission = permission
 
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+
 @dataclass
 class Giveaway:
     channelid: str
@@ -67,3 +71,10 @@ class Giveaway:
     
     def remove_reroll_action(self, index: int) -> None:
         del self.rerollactions[index]
+
+    def __post_init__(self):
+        if isinstance(self.permission, dict):
+            self.permission = DPermission(**self.permission)
+        self.multipliers = [GiveawayMultiplier(**multiplier) if isinstance(multiplier, dict) else multiplier for multiplier in self.multipliers]
+        self.actions = [Action(**action) if isinstance(action, dict) else action for action in self.actions]
+        self.rerollactions = [Action(**reroll_action) if isinstance(reroll_action, dict) else reroll_action for reroll_action in self.rerollactions]

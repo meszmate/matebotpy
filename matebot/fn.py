@@ -46,10 +46,12 @@ class FortniteClient:
         self.retry_delay: int = 180
         self.session: Optional[aiohttp.ClientSession] = None
         self._cache: Dict[str, FortniteCache] = {}
-        asyncio.run(self._initialize())
     
     async def _initialize(self) -> None:
         self.session = aiohttp.ClientSession(self._base_url)
+
+    def init(self) -> None:
+        asyncio.run(self._initialize())
 
     def data(self, lang: str) -> FortniteCache:
         return self._cache[lang]

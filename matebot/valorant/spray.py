@@ -15,3 +15,6 @@ class Spray:
     name: str
     icon: str
     levels: List[SprayLevel]
+
+    def __post_init__(self):
+        self.levels = [SprayLevel(**level) if isinstance(level, dict) else level for level in self.levels]

@@ -84,3 +84,8 @@ class Image:
     
     def remove_element(self, index: int) -> None:
         del self.elements[index]
+    
+    def __post_init__(self):
+        if isinstance(self.background, dict):
+            self.background = ImageBackground(**self.background)
+        self.elements = [ImageElement(**element) if isinstance(element, dict) else element for element in self.elements]

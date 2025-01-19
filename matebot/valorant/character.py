@@ -37,3 +37,8 @@ class Character:
     role: Optional[CharacterRole]
     portraitRenderTransform: CharacterPortraitRenderTransformation
     abilities: List[CharacterAbility]
+
+    def __post_init__(self):
+        self.levels = [CharacterAbility(**ability) if isinstance(ability, dict) else ability for ability in self.abilities]
+        self.role = CharacterRole(**self.role) if isinstance(self.role, dict) else self.role
+        self.portraitRenderTransform = CharacterPortraitRenderTransformation(**self.portraitRenderTransform) if isinstance(self.portraitRenderTransform, dict) else self.portraitRenderTransform
