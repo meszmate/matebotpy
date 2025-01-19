@@ -42,6 +42,9 @@ class WebsocketClient:
                         raise WebsocketClosed
                     elif msg.type == aiohttp.WSMsgType.ERROR:
                         raise Exception(f"WebSocket error: {msg.data}")
+    
+    async def close(self):
+        await self.websocket.close()
 
     async def ping(self) -> float:
         if not self.websocket:

@@ -75,7 +75,7 @@ class DashboardClient:
         for i in self._ws_guild_update_disconnect:
             asyncio.create_task(i(id))
 
-    async def run_update_listener(self, guildid):
+    async def run_update_listener(self, guildid: str):
         retries = 0
         while True:
             try:
@@ -86,6 +86,8 @@ class DashboardClient:
                 try:
                     await ws.connect()
                 except WebsocketClosed:
+                    if guildid not in self._websocket_update_connections:
+                        return
                     retries = 0
                     del self._websocket_update_connections[guildid]
                     asyncio.create_task(self._on_update_disconnect(guildid))
@@ -99,6 +101,10 @@ class DashboardClient:
                 retries+=1
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
+
+    async def close_update_listener(self, guildid: str):
+        await self._websocket_update_connections[guildid].close()
+        del self._websocket_update_connections[guildid]
 
     async def _on_events_message(self, id: str, data: any):
         for i in self._ws_guild_event_listeners:
@@ -117,18 +123,20 @@ class DashboardClient:
         while True:
             try:
                 ws = WebsocketClient(self.base_url.replace("https", "wss")+"/dashboard/"+guildid+"/events")
-                self._websocket_update_connections[guildid] = ws
+                self._websocket_event_connections[guildid] = ws
                 ws.on_message = self._on_events_message
                 ws.onconnect = self._on_events_connect
                 try:
                     await ws.connect()
                 except WebsocketClosed:
+                    if guildid not in self._websocket_event_connections:
+                        return
                     retries = 0
-                    del self._websocket_update_connections[guildid]
+                    del self._websocket_event_connections[guildid]
                     asyncio.create_task(self._on_events_disconnect(guildid))
                     raise WebsocketClosed()
                 except Exception as e:
-                    del self._websocket_update_connections[guildid]
+                    del self._websocket_event_connections[guildid]
                     raise e
             except Exception as e:
                 if retries >= self.max_retries:
@@ -137,6 +145,10 @@ class DashboardClient:
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
     
+    async def close_event_listener(self, guildid: str):
+        await self._websocket_event_connections[guildid].close()
+        del self._websocket_event_connections[guildid]
+
     async def update_ping(self, guildid: str) -> int:
         ws = self._websocket_update_connections[guildid]
         return await ws.ping()
@@ -160,8 +172,8 @@ class DashboardClient:
     async def fetch_guilds(self) -> GuildResponse:
         return GuildResponse(**await self._request("get", "/guilds"))
     
-    def guild(self, id, *, fetch: bool = True, ws: bool = False) -> Guild:
-        return Guild(id, client=self, fetch=fetch, ws=ws)
+    def guild(self, id) -> Guild:
+        return Guild(id, client=self)
     
     async def _fetch_guild(self, id: str) -> GuildData:
         return GuildData(**await self._request("get", f"/dashboard/{id}"))

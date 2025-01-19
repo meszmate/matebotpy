@@ -4,6 +4,7 @@ from matebot.websocket import WebsocketClient, WebsocketClosed
 from matebot.base import Notfound, NotLoaded
 from typing import Optional, List, Callable, Dict, Any
 import asyncio
+from dataclasses import dataclass
 
 FortniteLanguages = [
     "en",
@@ -21,6 +22,11 @@ FortniteLanguages = [
     "tr",
     "zh-CN"
 ]
+
+@dataclass
+class Version:
+    build: str
+    hash: str
 
 class FortniteCache:
     def __init__(self):
@@ -139,7 +145,7 @@ class FortniteClient:
             "X-API-KEY": self._api_key
         }
     
-    async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, lang:Optional[str]) -> Any:
+    async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, lang:Optional[str]="") -> Any:
         url = url[1:]
         if lang:
             url+="?lang="+lang
@@ -188,6 +194,8 @@ class FortniteClient:
                 try:
                     await ws.connect()
                 except WebsocketClosed:
+                    if not self._websocket_connection:
+                        return
                     retries = 0
                     self._websocket_connection = None
                     asyncio.create_task(self._on_disconnect())
@@ -201,6 +209,10 @@ class FortniteClient:
                 retries+=1
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
+
+    async def close(self):
+        await self._websocket_connection.close()
+        self._websocket_connection = None
 
     async def ping(self) -> int:
         ws = self._websocket_connection
@@ -267,3 +279,10 @@ class FortniteClient:
         if not ranks:
             url+="&ranks=0"
         return Stats(**await self._request("get", url))
+
+    async def fetch_version(self) -> Dict[str, Version]:
+        resp = await self._request("get", "/version")
+        return {
+            key: Version(**data)
+            for key, data in resp.items()
+        }

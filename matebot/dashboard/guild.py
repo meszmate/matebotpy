@@ -9,10 +9,9 @@ from matebot.dashboard.levels import LevelSettings
 from matebot.dashboard.giveaway import Giveaway
 from matebot.dashboard.tempchannels import TempChannelSettings
 from typing import List, Any
-import asyncio
 
 class Guild:
-    def __init__(self, id: str, *, client: Any):
+    def __init__(self, id: str, *, client: Any, auto_update: bool=False):
         self.id: str = id
         self.owner: bool
         self.name: str
@@ -22,19 +21,13 @@ class Guild:
         self.voices: List[Channel]
         self.roles: List[Role]
         self.premium: bool
+        self._auto_update: bool = auto_update
         self._client = client
         self._client.add_guild_update_handler(self.id, self._handle_updates)
 
     async def fetch(self) -> None:
         g = await self._client._fetch_guild(self.id)
         await self.parse(g)
-
-    async def start_handle_updates(self) -> None:
-        asyncio.run(self._client.run_update_listener(self.id))
-    
-    async def stop_updates(self) -> None:
-        self._ws.cancel()
-        self._ws = None
 
     async def parse(self, g: GuildData) -> None:
         self.owner = g.owner
@@ -47,7 +40,7 @@ class Guild:
         self.premium = g.premium
 
     async def _handle_updates(self, id, g: GuildData):
-        if id == self.id:
+        if id == self.id and self._auto_update:
             await self.parse(g)
     
     async def fetch_welcome(self) -> Welcome:
@@ -112,3 +105,6 @@ class Guild:
     
     async def set_tempchannels(self, channels: TempChannelSettings) -> None:
         await self._client._request("post", f"/dashboard/{self.id}/tempchannels", data=channels)
+    
+    async def send_message(self, channelid: str, messageid: str) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/message", data={"channelid": channelid, "messageid": messageid})
