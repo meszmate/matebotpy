@@ -197,7 +197,7 @@ class ValorantClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"/ws?apikey="+self._api_key, session=self.session)
+                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"ws?apikey="+self._api_key, session=self.session)
                 self._websocket_connection = ws
                 ws.on_message = self._on_message
                 ws.onconnect = self._on_connect
@@ -219,6 +219,7 @@ class ValorantClient:
                 retries+=1
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
+                await asyncio.sleep(self.retry_delay)
 
     async def close(self):
         await self._websocket_connection.close()

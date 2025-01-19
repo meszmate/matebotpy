@@ -79,7 +79,7 @@ class DashboardClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/ws?auth="+self._token, session=self.session)
+                ws = WebsocketClient(self.session._base_url.replace("https", "wss")+"dashboard/"+guildid+"/ws?auth="+self._token, session=self.session)
                 self._websocket_update_connections[guildid] = ws
                 ws.on_message = self._on_update_message
                 ws.onconnect = self._on_update_connect
@@ -101,6 +101,7 @@ class DashboardClient:
                 retries+=1
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
+                await asyncio.sleep(self.retry_delay)
 
     async def close_update_listener(self, guildid: str):
         await self._websocket_update_connections[guildid].close()
@@ -122,7 +123,7 @@ class DashboardClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self._base_url.replace("https", "wss")+"/dashboard/"+guildid+"/events?auth="+self._token, session=self.session)
+                ws = WebsocketClient(self._base_url.replace("https", "wss")+"dashboard/"+guildid+"/events?auth="+self._token, session=self.session)
                 self._websocket_event_connections[guildid] = ws
                 ws.on_message = self._on_events_message
                 ws.onconnect = self._on_events_connect
@@ -144,6 +145,7 @@ class DashboardClient:
                 retries+=1
                 if self._log:
                     print(f"Connection failed. Retrying in {self.retry_delay} seconds... ({retries}/{self.max_retries})\nError: {e}")
+                await asyncio.sleep(self.retry_delay)
     
     async def close_event_listener(self, guildid: str):
         await self._websocket_event_connections[guildid].close()

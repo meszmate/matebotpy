@@ -6,7 +6,7 @@ long_description = (current_dir / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="matebotpy", 
-    version="0.0.98",
+    version="0.0.99",
     description="Python API Wrapper for Matebot.",
     long_description=long_description,
     long_description_content_type="text/markdown",
