@@ -20,7 +20,7 @@ class WebsocketClient:
 
     async def _handle_messages(self, id: str, data: Any):
         if self.on_message:
-            asyncio.create_task(self.on_message(id, data))
+            await self.on_message(id, data)
 
     async def _heartbeat(self):
         while True:
