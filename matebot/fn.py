@@ -210,18 +210,20 @@ class FortniteClient:
         return Banners(**await self._request("get", "/banners/"+id, lang=lang))
     
     async def fetch_newdisplayassets(self, lang: Optional[str]=None) -> Dict[str, List[NewDisplayAsset]]:
+        resp = await self._request("get", "/newdisplayassets", lang=lang)
         return {
             key: NewDisplayAsset(**data)
-            for key, data in await self._request("get", "/newdisplayassets", lang=lang).items()
+            for key, data in resp.items()
         }
     
     async def fetch_newdisplayassets_item(self, lang: Optional[str]=None) -> NewDisplayAsset:
         return NewDisplayAsset(**await self._request("get", "/newdisplayassets", lang=lang))
 
     async def fetch_displayassets(self, lang: Optional[str]=None) -> Dict[str, str]:
+        resp = await self._request("get", "/displayassets", lang=lang)
         return {
             key: str(data)
-            for key, data in await self._request("get", "/displayassets", lang=lang).items()
+            for key, data in resp.items()
         }
     
     async def fetch_displayassets_item(self, id: str, lang: Optional[str]=None) -> str:

@@ -235,15 +235,17 @@ class ValorantClient:
         return [Spray(**spray) for spray in await self._request("get", "/sprays", lang=lang)]
     
     async def fetch_themes(self, lang: Optional[str]=None) -> Dict[str, Theme]:
+        resp = await self._request("get", "/themes", lang=lang)
         return {
             key: Theme(**data)
-            for key, data in await self._request("get", "/themes", lang=lang).items()
+            for key, data in resp.items()
         }
 
     async def fetch_contenttiers(self, lang: Optional[str]=None) -> Dict[str, ContentTier]:
+        resp = await self._request("get", "/contenttiers", lang=lang)
         return {
             key: ContentTier(**data)
-            for key, data in await self._request("get", "/contenttiers", lang=lang).items()
+            for key, data in resp.items()
         }
     
     async def fetch_bundles(self, lang: Optional[str]=None) -> List[Bundle]:

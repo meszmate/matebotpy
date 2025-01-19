@@ -1,9 +1,15 @@
 from setuptools import setup, find_packages
+import pathlib
+
+current_dir = pathlib.Path(__file__).parent
+long_description = (current_dir / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="matebotpy", 
-    version="0.0.9",
+    version="0.0.91",
     description="Python API Wrapper for Matebot.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Máté Mészáros",
     author_email="meszmatew@gmail.com",
     url="https://github.com/meszmate/matebotpy",
