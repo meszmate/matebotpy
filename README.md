@@ -48,9 +48,6 @@ while True:
     weapon = selected_weapons[0]
     skin = input("search skin: ")
 
-    for name, value, in weapon.skins.items():
-        print(name, type(value))
-    
     searched_skins = [value for value in weapon.skins.values() if skin.lower() in value.name.lower()]
     if len(searched_skins) == 0:
         print("skin not found")
