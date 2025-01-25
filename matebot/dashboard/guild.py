@@ -106,5 +106,5 @@ class Guild:
     async def set_tempchannels(self, channels: TempChannelSettings) -> None:
         await self._client._request("post", f"/dashboard/{self.id}/tempchannels", data=channels)
     
-    async def send_message(self, channelid: str, messageid: str) -> None:
-        await self._client._request("post", f"/dashboard/{self.id}/message", data={"channelid": channelid, "messageid": messageid})
+    async def send_message(self, type: int, channelid: str, messageid: str, message: str) -> None:
+        await self._client._request("post", f"/dashboard/{self.id}/message", data={"type": type, "channelid": channelid, "messageid": messageid, "message": message})
