@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional, Any, Dict, Union
-from matebot.fortnite.items import Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno
+from matebot.fortnite.items import Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno, JamTrack
 
 @dataclass
 class PrimarySecondaryColor:
@@ -45,5 +45,5 @@ class Stats:
     def __post_init__(self):
         self.ranks = [StatsTrack(**track) if isinstance(track, dict) else track for track in self.ranks]
 
-Definition = Union[Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno]
-DefinitionTypes = (Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno)
+Definition = Union[Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno, JamTrack]
+DefinitionTypes = (Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno, JamTrack)

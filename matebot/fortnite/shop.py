@@ -17,6 +17,10 @@ class ItemShopEntryBundleItem:
     alreadyOwnedPriceReduction: float
     item: Optional[ItemShopEntryBundleItemInfo]
 
+    def __post_init__(self):
+        if self.item:
+            self.item = ItemShopEntryBundleItemInfo(**self.item)
+
 @dataclass
 class ItemShopEntryBundle:
     name: str
@@ -27,6 +31,9 @@ class ItemShopEntryBundle:
     currencySubType: str
     displayType: str
     bundleItems: List[ItemShopEntryBundleItem]
+
+    def __post_init__(self):
+        self.bundleItems = [ItemShopEntryBundleItem(**item) for item in self.bundleItems]
 
 @dataclass
 class ItemShopEntryColors:
@@ -95,9 +102,11 @@ class ItemShopEntry:
         if isinstance(self.bundleInfo, dict):
             self.bundleInfo = ItemShopEntryBundle(**self.bundleInfo)
 
+        self.images = [NewDisplayAsset(**img) for img in self.images]
         self.prices = [ItemShopEntryPrice(**price) for price in self.prices]
         self.items = [ItemShopEntryItem(**item) for item in self.items]
         self.requirements = [ItemShopEntryGrant(**grant) for grant in self.requirements]
+        self.colors = ItemShopEntryColors(**self.colors)
 
         if self.baseItem:
             for t in DefinitionTypes:
