@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
-from matebot.fortnite.base import Definition
+from typing import Any, List, Optional
+from matebot.fortnite.base import Definition, DefinitionTypes
 from matebot.fortnite.newdisplayassets import NewDisplayAsset
+import inspect
 
 @dataclass
 class ItemShopEntryBundleItemInfo:
@@ -42,7 +43,13 @@ class ItemShopEntryItem:
 
     def __post_init__(self):
         if self.definition:
-            self.definition = Definition(**self.definition)
+            for t in DefinitionTypes:
+                params = inspect.signature(t.__init__).parameters
+                param_keys = set(params.keys()) - {"self"} 
+
+                if set(self.definition.keys()) == param_keys:
+                    self.definition = t(**self.definition)
+                    break
 
 @dataclass
 class ItemShopEntryPrice:
@@ -56,8 +63,9 @@ class ItemShopEntryPrice:
 
 @dataclass
 class ItemShopEntryGrant:
-    templateId: str
-    quantity: float
+    minQuantity: float
+    requiredId: str
+    requirementType: str
 
 @dataclass
 class ItemShopEntry:
@@ -92,7 +100,13 @@ class ItemShopEntry:
         self.requirements = [ItemShopEntryGrant(**grant) for grant in self.requirements]
 
         if self.baseItem:
-            self.baseItem = Definition(**self.baseItem)
+            for t in DefinitionTypes:
+                params = inspect.signature(t.__init__).parameters
+                param_keys = set(params.keys()) - {"self"} 
+
+                if set(self.baseItem.keys()) == param_keys:
+                    self.baseItem = t(**self.baseItem)
+                    break
 
 @dataclass
 class ItemShopRow:
