@@ -162,13 +162,13 @@ class FortniteClient:
             else:
                 raise Exception(f"Request failed: {response.status} - {await response.text()}")
 
-    def add_guild_update_handler(self, listener: Callable[[WebsocketEvent], None]) -> None:
+    def add_event_handler(self, listener: Callable[[WebsocketEvent], None]) -> None:
         self._ws_listeners.append(listener)
 
-    def add_guild_update_handler_connect(self, listener: Callable[[], None]) -> None:
+    def add_event_handler_connect(self, listener: Callable[[], None]) -> None:
         self._ws_connect.append(listener)
 
-    def add_guild_update_handler_disconnect(self, listener: Callable[[], None]) -> None:
+    def add_event_handler_disconnect(self, listener: Callable[[], None]) -> None:
         self._ws_listeners.append(listener)
     
     async def _on_message(self, _, data: Any):
