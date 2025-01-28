@@ -14,7 +14,8 @@ class Material:
     image: str
 
     def __post_init__(self):
-        self.parameters = [MaterialParameter(**param) if isinstance(param, dict) else param for param in self.parameters]
+        if self.parameters:
+            self.parameters = [MaterialParameter(**param) if isinstance(param, dict) else param for param in self.parameters]
 
 @dataclass
 class NewDisplayAsset:
