@@ -2,19 +2,6 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 @dataclass
-class JamTrack:
-    title: str
-    releaseYear: float
-    duration: float
-    album: str
-    bpm: float
-    scale: str
-    artist: str
-    midiDataURL: str
-    albumArtURL: str
-    templateId: str
-
-@dataclass
 class CosmeticIconLegoElement:
     wide: str
     small: str
