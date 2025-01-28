@@ -254,7 +254,7 @@ class FortniteClient:
     async def fetch_quests(self, lang: Optional[str]=None) -> Quests:
         return Quests(**await self._request("get", "/quests", lang=lang))
 
-    async def fetch_sparktracks(self, lang: Optional[str]=None) -> List[SparkTrack]:
+    async def fetch_sparktracks(self, lang: Optional[str]=None) -> Dict[str, SparkTrack]:
         return [SparkTrack(**item) for item in await self._request("get", "/sparktracks", lang=lang)]
     
     async def fetch_news(self, lang: Optional[str]=None) -> Any:
