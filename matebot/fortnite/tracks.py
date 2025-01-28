@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class SparkTrack:
-    title: str
+    name: str
     releaseYear: float
     duration: float
     album: str
