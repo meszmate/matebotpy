@@ -260,7 +260,7 @@ class FortniteClient:
     async def fetch_news(self, lang: Optional[str]=None) -> Any:
         return await self._request("get", "/news", lang=lang)
     
-    async def fetch_shop_br(self, lang: Optional[str]=None) -> Any:
+    async def fetch_shop_br(self, lang: Optional[str]=None) -> ItemShop:
         return ItemShop(**await self._request("get", "/shop/br", lang=lang))
     
     async def fetch_stats(self, name: str, *, by_id: bool=False, ends_after: Optional[str]=None, start_time: Optional[str]=None, end_time: Optional[str]=None, stats: bool=True, ranks: bool=True, platform: Optional[str]=None) -> Stats:

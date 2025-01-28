@@ -70,7 +70,7 @@ class ItemShopEntry:
     baseItem: Optional[Definition]
     images: List[NewDisplayAsset]
     prices: List[ItemShopEntryPrice]
-    bundleInfo: Optional[ItemShopEntryBundleItemInfo]
+    bundleInfo: Optional[ItemShopEntryBundle]
     newDisplayAssetPath: str
     displayAssetPath: str
     templateId: str
@@ -85,7 +85,7 @@ class ItemShopEntry:
 
     def __post_init__(self):
         if isinstance(self.bundleInfo, dict):
-            self.bundleInfo = ItemShopEntryBundleItemInfo(**self.bundleInfo)
+            self.bundleInfo = ItemShopEntryBundle(**self.bundleInfo)
 
         self.prices = [ItemShopEntryPrice(**price) for price in self.prices]
         self.items = [ItemShopEntryItem(**item) for item in self.items]
