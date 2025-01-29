@@ -187,7 +187,7 @@ class FortniteClient:
         retries = 0
         while True:
             try:
-                ws = WebsocketClient(self._base_url.replace("https", "wss")+"ws", log=self._log)
+                ws = WebsocketClient(self._base_url.replace("https", "wss")+"ws?apikey="+self._api_key, log=self._log)
                 self._websocket_connection = ws
                 ws.on_message = self._on_message
                 ws.onconnect = self._on_connect
