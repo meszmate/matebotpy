@@ -23,6 +23,7 @@ class CosmeticsBattleRoyale:
     loadingScreens: Dict[str, Cosmetic]
     musicPacks: Dict[str, Cosmetic]
     variants: Dict[str, CosmeticVariantToken]
+    shoes: Dict[str, Cosmetic]
 
     def __post_init__(self):
         self.characters = {key: Character(**value) for key, value in self.characters.items()}
@@ -39,6 +40,7 @@ class CosmeticsBattleRoyale:
         self.loadingScreens = {key: Cosmetic(**value) for key, value in self.loadingScreens.items()}
         self.musicPacks = {key: Cosmetic(**value) for key, value in self.musicPacks.items()}
         self.variants = {key: CosmeticVariantToken(**value) for key, value in self.variants.items()}
+        self.shoes = {key: Cosmetic(**value) for key, value in self.shoes.items()}
 
 @dataclass
 class CosmeticsCars:
