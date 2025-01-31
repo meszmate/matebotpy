@@ -12,7 +12,7 @@ class CosmeticsBattleRoyale:
     characters: Dict[str, Character]
     backpacks: Dict[str, Cosmetic]
     gliders: Dict[str, Cosmetic]
-    petcarriers: Dict[str, Cosmetic]
+    petCarriers: Dict[str, Cosmetic]
     contrails: Dict[str, Cosmetic]
     pickaxes: Dict[str, Cosmetic]
     dances: Dict[str, Cosmetic]
@@ -29,7 +29,7 @@ class CosmeticsBattleRoyale:
         self.characters = {key: Character(**value) for key, value in self.characters.items()}
         self.backpacks = {key: Cosmetic(**value) for key, value in self.backpacks.items()}
         self.gliders = {key: Cosmetic(**value) for key, value in self.gliders.items()}
-        self.petcarriers = {key: Cosmetic(**value) for key, value in self.petcarriers.items()}
+        self.petCarriers = {key: Cosmetic(**value) for key, value in self.petCarriers.items()}
         self.contrails = {key: Cosmetic(**value) for key, value in self.contrails.items()}
         self.pickaxes = {key: Cosmetic(**value) for key, value in self.pickaxes.items()}
         self.dances = {key: Cosmetic(**value) for key, value in self.dances.items()}
