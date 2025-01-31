@@ -75,7 +75,6 @@ class Character:
 
 @dataclass
 class Juno:
-    id: str
     name: str
     rarity: str
     tags: List[str]
