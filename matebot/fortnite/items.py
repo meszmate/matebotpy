@@ -42,6 +42,7 @@ class Cosmetic:
     description: str
     shortDescription: str
     rarity: str
+    lastseen: str
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
@@ -58,6 +59,7 @@ class Character:
     shortDescription: str
     gender: str
     rarity: str
+    lastseen: str
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
@@ -77,6 +79,7 @@ class Character:
 class Juno:
     name: str
     rarity: str
+    lastseen: str
     tags: List[str]
     icon: CosmeticIcon
 
@@ -89,6 +92,7 @@ class CarCosmetic:
     name: str
     description: str
     shortDescription: str
+    lastseen: str
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
@@ -105,6 +109,7 @@ class CosmeticVariantToken:
     nameTag: str
     name: str
     description: str
+    lastseen: str
     shortDescription: str
     tags: List[str]
     icon: CosmeticIcon
@@ -124,6 +129,7 @@ class CosmeticVehicleVariant:
     channelTag: str
     nameTag: str
     name: str
+    lastseen: str
     description: str
     shortDescription: str
     rarity: str
@@ -138,6 +144,7 @@ class Instrument:
     description: str
     shortDescription: str
     rarity: str
+    lastseen: str
     variants: List[CosmeticVariant]
     tags: List[str]
     icon: CosmeticIcon
