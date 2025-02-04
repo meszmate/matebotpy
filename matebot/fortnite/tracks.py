@@ -11,3 +11,4 @@ class SparkTrack:
     scale: str
     albumArt: str
     midiData: str
+    lastseen: str
