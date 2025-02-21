@@ -33,9 +33,12 @@ class DashboardClient:
             "Authorization": self._token
         }
     
-    async def _request(self, method: str, url: str, *, auth: Optional[bool]=True, data: Optional[Any]=None) -> Any:
+    async def _request(self, method: str, url: str, *, form: bool=False, auth: bool=True, data: Optional[Any]=None) -> Any:
         url = url[1:]
-        async with self.session.request(method,url,headers=self._get_headers() if auth else None, json=asdict(data) if data else None) as response:
+        if form:
+            fdata = aiohttp.FormData()
+            fdata.add_field("jsonData", asdict(data))
+        async with self.session.request(method,url,headers=self._get_headers() if auth else None, json=asdict(data) if data and not form else None, data=fdata if form else None) as response:
             if response.status == 200:
                 return await response.json()
             elif response.status == 404:

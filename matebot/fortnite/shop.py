@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Any, List, Optional
 from matebot.fortnite.base import Definition, DefinitionTypes
 from matebot.fortnite.newdisplayassets import NewDisplayAsset
+from matebot.fortnite.tracks import SparkTrack
+from matebot.fortnite.items import Cosmetic, Juno, CarCosmetic, Instrument, Character, CosmeticVehicleVariant, CosmeticVariantToken
 import inspect
 
 @dataclass
@@ -49,14 +51,27 @@ class ItemShopEntryItem:
     definition: Optional[Definition]
 
     def __post_init__(self):
-        if self.definition:
-            for t in DefinitionTypes:
-                params = inspect.signature(t.__init__).parameters
-                param_keys = set(params.keys()) - {"self"} 
-
-                if set(self.definition.keys()) == param_keys:
-                    self.definition = t(**self.definition)
-                    break
+        if self.definition and isinstance(self.definition, dict):
+            x = self.templateId.lower().split(":")
+            if len(x) > 0:
+                x = x[0]
+                if x == "sparkssong":
+                    self.definition = SparkTrack(**self.definition)
+                elif x == "athenacharacter":
+                    self.definition = Character(**self.definition)
+                elif x.startswith("vehiclecosmetics"):
+                    self.definition = CarCosmetic(**self.definition)
+                elif x.startswith("sparks"):
+                    self.definition = Instrument(**self.definition)
+                elif x.startswith("juno"):
+                    self.definition = Juno(**self.definition)
+                elif x == "cosmeticvarianttoken":
+                    if not self.definition.get("rarity"):
+                        self.definition = CosmeticVehicleVariant(**self.definition)
+                    else:
+                        self.definition = CosmeticVariantToken(**self.definition)
+                else:
+                    self.definition = Cosmetic(**self.definition)
 
 @dataclass
 class ItemShopEntryPrice:
@@ -108,14 +123,29 @@ class ItemShopEntry:
         self.requirements = [ItemShopEntryGrant(**grant) for grant in self.requirements]
         self.colors = ItemShopEntryColors(**self.colors)
 
-        if self.baseItem:
-            for t in DefinitionTypes:
-                params = inspect.signature(t.__init__).parameters
-                param_keys = set(params.keys()) - {"self"} 
+        if self.baseItem and isinstance(self.baseItem, dict):
+            x = self.templateId.lower().split(":")
+            if len(x) > 0:
+                x = x[0]
+                if x == "sparkssong":
+                    self.baseItem = SparkTrack(**self.baseItem)
+                elif x == "athenacharacter":
+                    self.baseItem = Character(**self.baseItem)
+                elif x.startswith("vehiclecosmetics"):
+                    self.baseItem = CarCosmetic(**self.baseItem)
+                elif x.startswith("sparks"):
+                    self.baseItem = Instrument(**self.baseItem)
+                elif x.startswith("juno"):
+                    self.baseItem = Juno(**self.baseItem)
+                elif x == "cosmeticvarianttoken":
+                    if not self.baseItem.get("rarity"):
+                        self.baseItem = CosmeticVehicleVariant(**self.baseItem)
+                    else:
+                        self.baseItem = CosmeticVariantToken(**self.baseItem)
+                else:
+                    self.baseItem = Cosmetic(**self.baseItem)
 
-                if set(self.baseItem.keys()) == param_keys:
-                    self.baseItem = t(**self.baseItem)
-                    break
+            
 
 @dataclass
 class ItemShopRow:

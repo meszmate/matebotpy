@@ -47,4 +47,3 @@ class Stats:
         self.ranks = [StatsTrack(**track) if isinstance(track, dict) else track for track in self.ranks]
 
 Definition = Union[Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno, SparkTrack]
-DefinitionTypes = (Character, Cosmetic, CarCosmetic, Instrument, CosmeticVariantToken, CosmeticVehicleVariant, Juno, SparkTrack)

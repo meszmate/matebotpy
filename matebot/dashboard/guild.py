@@ -23,7 +23,7 @@ class Guild:
         self.premium: bool
         self._auto_update: bool = auto_update
         self._client = client
-        self._client.add_guild_update_handler(self.id, self._handle_updates)
+        self._client.add_guild_update_handler(self._handle_updates)
 
     async def fetch(self) -> None:
         g = await self._client._fetch_guild(self.id)
@@ -47,7 +47,7 @@ class Guild:
         return Welcome(**await self._client._request("get", f"/dashboard/{self.id}/welcome"))
 
     async def set_welcome(self, data: Welcome) -> None:
-        await self._client._request("post", f"/dashboard/{self.id}/welcome", data=data)
+        await self._client._request("post", f"/dashboard/{self.id}/welcome", data=data, form=True)
     
     async def fetch_defender(self) -> Defender:
         return Defender(**await self._client._request("get", f"/dashboard/{self.id}/defender"))
@@ -77,21 +77,21 @@ class Guild:
         return Builtin(**await self._client._request("get", f"/dashboard/{self.id}/builtin"))
 
     async def set_builtin(self, builtin: Builtin) -> None:
-        await self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin)
+        await self._client._request("post", f"/dashboard/{self.id}/builtin", data=builtin, form=True)
     
-    async def get_slashcommands(self) -> SlashCommands:
+    async def fetch_slashcommands(self) -> SlashCommands:
         return SlashCommands(**await self._client._request("get", f"/dashboard/{self.id}/slash"))
 
     async def set_slashcommands(self, commands: SlashCommands) -> None:
         await self._client._request("post", f"/dashboard/{self.id}/slash", data=commands)
 
-    async def get_level_settings(self) -> LevelSettings:
+    async def fetch_level_settings(self) -> LevelSettings:
         return LevelSettings(**await self._client._request("get", f"/dashboard/{self.id}/levels"))
     
     async def set_level_settings(self, settings: LevelSettings) -> None:
-        await self._client._request("post", f"/dashboard/{self.id}/levels", data=settings)
+        await self._client._request("post", f"/dashboard/{self.id}/levels", data=settings, form=True)
         
-    async def get_giveaways(self) -> List[Giveaway]:
+    async def fetch_giveaways(self) -> List[Giveaway]:
         return [Giveaway(**gw) for gw in await self._client._request("get", f"/dashboard/{self.id}/giveaways")]
 
     async def set_giveaway(self, giveaway: Giveaway) -> None:
@@ -100,7 +100,7 @@ class Guild:
     async def delete_giveaway(self, channelid: str, messageid: str) -> None:
         await self._client._request("delete", f"/dashboard/{self.id}/giveaways?channelid={channelid}&messageid={messageid}")
 
-    async def get_tempchannels(self) -> TempChannelSettings:
+    async def fetch_tempchannels(self) -> TempChannelSettings:
         return TempChannelSettings(**await self._client._request("get", f"/dashboard/{self.id}/tempchannels"))
     
     async def set_tempchannels(self, channels: TempChannelSettings) -> None:
