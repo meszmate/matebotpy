@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, List, Optional
-from matebot.fortnite.base import Definition, DefinitionTypes
+from matebot.fortnite.base import Definition
 from matebot.fortnite.newdisplayassets import NewDisplayAsset
 from matebot.fortnite.tracks import SparkTrack
 from matebot.fortnite.items import Cosmetic, Juno, CarCosmetic, Instrument, Character, CosmeticVehicleVariant, CosmeticVariantToken
